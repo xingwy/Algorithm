@@ -2,7 +2,7 @@
 
 - **初**
 
-  闲来无事，于是找了一些各个公司的招聘程序笔试题。在此记录并分享笔者代码。由于能力有限，所以每个题的解法可能不是最优方法。仅是供大家参考且欢迎大佬们的指正。
+  闲来无事，于是找了一些各个公司的招聘程序笔试题。在此记录并分享笔者代码。由于能力有限，所以每个题的解法可能不是最优方法。
 
 
 
@@ -10,7 +10,15 @@
 
   [**今日头条2018校招后端方向(第一批)**](https://github.com/xingwy/Hugging-Algorithm/blob/master/%E4%BB%8A%E6%97%A5%E5%A4%B4%E6%9D%A12018%E6%A0%A1%E6%8B%9B%E5%90%8E%E7%AB%AF%E6%96%B9%E5%90%91(%E7%AC%AC%E4%B8%80%E6%89%B9).md)
 
+  [**今日头条2018校招后端方向(第二批)**](https://github.com/xingwy/Hugging-Algorithm/blob/master/%E4%BB%8A%E6%97%A5%E5%A4%B4%E6%9D%A12018%E6%A0%A1%E6%8B%9B%E5%90%8E%E7%AB%AF%E6%96%B9%E5%90%91%EF%BC%88%E7%AC%AC%E4%BA%8C%E6%89%B9%EF%BC%89.md)
+
+  [**今日头条2018校招后端方向(第三批)**](https://github.com/xingwy/Hugging-Algorithm/blob/master/%E4%BB%8A%E6%97%A5%E5%A4%B4%E6%9D%A12018%E6%A0%A1%E6%8B%9B%E5%90%8E%E7%AB%AF%E6%96%B9%E5%90%91%EF%BC%88%E7%AC%AC%E4%B8%89%E6%89%B9%EF%BC%89.md)
+
+  [**今日头条2018校招后端方向(第四批)**](https://github.com/xingwy/Hugging-Algorithm/blob/master/%E4%BB%8A%E6%97%A5%E5%A4%B4%E6%9D%A12018%E6%A0%A1%E6%8B%9B%E5%90%8E%E7%AB%AF%E6%96%B9%E5%90%91%EF%BC%88%E7%AC%AC%E5%9B%9B%E6%89%B9%EF%BC%89.md)
+
   [**爱奇艺2018秋招算法工程师(第一场)**](https://github.com/xingwy/Hugging-Algorithm/blob/master/%E7%88%B1%E5%A5%87%E8%89%BA2018%E7%A7%8B%E6%8B%9B%E7%AE%97%E6%B3%95%E5%B7%A5%E7%A8%8B%E5%B8%88%EF%BC%88%E7%AC%AC%E4%B8%80%E5%9C%BA%EF%BC%89.md)
+
+  [**爱奇艺2018秋招算法工程师(第二场)**](https://github.com/xingwy/Hugging-Algorithm/blob/master/%E7%88%B1%E5%A5%87%E8%89%BA2018%E7%A7%8B%E6%8B%9B%E7%AE%97%E6%B3%95%E5%B7%A5%E7%A8%8B%E5%B8%88%EF%BC%88%E7%AC%AC%E4%BA%8C%E5%9C%BA%EF%BC%89.md)
 
   [**爱奇艺2018秋招算法工程师(第三场)**](https://github.com/xingwy/Hugging-Algorithm/blob/master/%E7%88%B1%E5%A5%87%E8%89%BA2018%E7%A7%8B%E6%8B%9B%E7%AE%97%E6%B3%95%E5%B7%A5%E7%A8%8B%E5%B8%88%EF%BC%88%E7%AC%AC%E4%B8%89%E5%9C%BA%EF%BC%89.md)
 
