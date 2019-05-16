@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://segmentfault.com/a/1190000008484167 -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"><meta name="renderer" content="webkit"><meta property="qc:admins" content="15317273575564615446375"><meta property="og:image" content="https://cdn.segmentfault.com/v-5c0e40c9/global/img/touch-icon.png"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"><meta name="alexaVerifyID" content="LkzCRJ7rPEUwt6fVey2vhxiw1vQ"><meta name="apple-itunes-app" content="app-id=958101793, app-argument="><title>Manacher算法 - 经典算法与数据结构 - SegmentFault 思否</title><meta name="description" content="原文链接：[链接] 一：背景 给定一个字符串，求出其最长回文子串。例如： s=&quot;abcd&quot;，最长回文长度为 1； s=&quot;ababa&quot;，最长回文长度为 5； s=&quot;abccb&quot;，最长回文长度为 4，即bccb。 以上问题的传统思路大概是，遍历..."><meta name="keywords" content="c++,数据结构,算法"><link rel="search" type="application/opensearchdescription+xml" href="https://segmentfault.com/opensearch.xml" title="SegmentFault"><link rel="shortcut icon" href="https://cdn.segmentfault.com/v-5c0e40c9/global/img/favicon.ico"><link rel="apple-touch-icon" href="https://cdn.segmentfault.com/v-5c0e40c9/global/img/touch-icon.png"><meta name="msapplication-TileColor" content="#009a61"><meta name="msapplication-square150x150logo" content="https://cdn.segmentfault.com/v-5c0e40c9/global/img/touch-icon.png"><meta name="baidu_union_verify" content="bcf7fd80dca60d53d46d5b46e1b990ca"><link rel="alternate" type="application/atom+xml" title="SegmentFault 最新问题" href="https://segmentfault.com/feeds/questions"><link rel="alternate" type="application/atom+xml" title="SegmentFault 最新文章" href="https://segmentfault.com/feeds/blogs"><link rel="stylesheet" href="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/global.css"><link rel="stylesheet" href="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/blog.css"><link rel="stylesheet" href="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/responsive.css"><script src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/hm.js.下载"></script><script async="" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/analytics.js.下载"></script><script src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/f.txt"></script><script src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/ca-pub-6330872677300335.js.下载"></script><script type="text/javascript" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/spcjs.php"></script><script type="text/javascript" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/spc.php"></script><script type="text/javascript" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/fl.js.下载"></script>
+<script charset="utf-8" id="ParadigmSDK" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/ParadigmSDK_v2.js.下载" data="216" defsi="594"></script><script>
+    ParadigmSDK.init("46e957bd9dea4acdaa15b4b64aff728f");
+    ParadigmSDK.trackDetailPageShow();
+</script><link rel="preload" href="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/f(1).txt" as="script"><script type="text/javascript" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/f(1).txt"></script><link rel="preload" href="https://pagead2.googlesyndication.com/pagead/js/r20181205/r20180604/show_ads_impl.js" as="script"><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="https://cdn.segmentfault.com/v-5c0e40c9/3rd/highlightjs/highlight.pack.js" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/highlight.pack.js.下载"></script><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">.MathJax_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MathJax .MJX-monospace {font-family: monospace}
+.MathJax .MJX-sans-serif {font-family: sans-serif}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; padding: 0; margin: 0}
+.MathJax:focus, body :focus .MathJax {display: inline-table}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0!important; padding: 0!important; margin: 0!important; vertical-align: 0!important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap!important}
+.MathJax img {display: inline!important; float: none!important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block!important; overflow: hidden; width: 1px; height: 60ex; min-height: 0; max-height: none}
+.MathJax .MathJax_EmBox {display: block!important; overflow: hidden; width: 1px; height: 60em; min-height: 0; max-height: none}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Main; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Main-bold; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Main-italic; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Math-italic; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Caligraphic; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Size1; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Size2; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Size3; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf?rev=2.6.1') format('opentype')}
+@font-face {font-family: MathJax_Size4; src: url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff?rev=2.6.1') format('woff'), url('https://cdn.segmentfault.com/v-5c0e40c9/3rd/MathJax/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf?rev=2.6.1') format('opentype')}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style></head><!-- 推荐引擎 --><body data-mod="blog" class="blog-post "><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div id="MathJax_Message" style="display: none;"></div><!--[if lt IE 9]><div class="alert alert-danger topframe" role="alert">你的浏览器实在<strong>太太太太太太旧了</strong>，放学别走，升级完浏览器再说 <a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div><![endif]--><img id="icon4weChat" style="height: 0;width: 0;" data-src="https://cdn.segmentfault.com/v-5c0e40c9/global/img/touch-icon-512.png"><div id="gridMapHoverBox" style="position:absolute; border: 1px solid #009a61; z-index:99; font-size: 10px; background:#fff"></div><div class="global-nav sf-header sf-header--index"><div class="bottom-nav visible-xs visible-sm"><div class="opts"><a class="opts-group " href="https://segmentfault.com/"><i class="fa fa-home" aria-hidden="true"></i><span>首页</span></a><a class="opts-group " href="https://segmentfault.com/questions"><i class="fa fa-comments" aria-hidden="true"></i><span>问答</span></a><a class="opts-group active" href="https://segmentfault.com/blogs"><i class="fa fa-pencil-square" aria-hidden="true"></i><span>专栏</span></a><a class="opts-group " href="https://segmentfault.com/lives"><i class="fa fa-play-circle" aria-hidden="true"></i><span>讲堂</span></a><div class="opts-group"><div class="btn-group dropup"><i class="fa fa-bars dropdown hoverDropdown" data-toggle="dropdown" aria-hidden="true"><span>更多</span></i><ul class="dropdown-menu"><li><a href="https://segmentfault.com/jobs">职位</a></li><li><a href="https://segmentfault.com/events">活动</a></li><li><a href="https://segmentfault.com/tags">标签</a></li><li><a href="https://segmentfault.com/badges">徽章</a></li></ul></div></div></div></div><nav class="container nav"><div class="visible-xs visible-sm header-response"><a href="https://segmentfault.com/search" style="display:block"><i class="fa fa-search" aria-hidden="true"></i></a><div class="sf-header__logo sf-header__logo--response"><h1><a href="https://segmentfault.com/" style="height:24px; background-size: auto 24px;"></a></h1></div><a href="https://segmentfault.com/user/login" class="pull-right login-btn"><i class="fa fa-user" aria-hidden="true"></i></a></div><script>
+mobileScroll(
+    function(direction) { 
+        try {
+            if (direction === 'down') {
+                document.querySelector('.bottom-nav').classList.add('hidden')
+            } else {
+                document.querySelector('.bottom-nav').classList.remove('hidden')
+            }
+        } catch(err) {}
+    }
+);    
+function mobileScroll( fn ) {
+    var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+        fn = fn || function() {};
+    window.addEventListener("scroll", function() {
+        var afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+            delta = afterScrollTop - beforeScrollTop;
+        if( delta === 0 ) return false;
+        fn( delta > 0 ? "down" : "up" );
+        beforeScrollTop = afterScrollTop;
+    }, false);
+}
+</script><div class="row hidden-xs hidden-sm"><div class="col-sm-8 col-md-9 col-lg-9"><div class="sf-header__logo"><h1><a href="https://segmentfault.com/">SegmentFault</a></h1></div><div><ul class="menu list-inline pull-left hidden-xs"><li class="menu__item"><a href="https://segmentfault.com/" class="">首页</a></li><li class="menu__item"><a href="https://segmentfault.com/questions" class="">问答</a></li><li class="menu__item"><a href="https://segmentfault.com/blogs" class="active-nav">专栏</a></li><li class="menu__item"><a class=" " href="https://segmentfault.com/lives">讲堂</a></li><li class="menu__item menu__item--more dropdown"><a href="https://segmentfault.com/a/1190000008484167##" class="dropdown-toggle dropdownBtn" data-toggle="dropdown">
+                                        发现<i class="fa fa-caret-down" style="font-size: 14px;margin-left: 5px;" aria-hidden="true"></i></a><div class="dropdown-block hidden"><ul class="dropdown-content-menu"><li><a href="https://segmentfault.com/groups">圈子</a></li><li><a href="https://segmentfault.com/events">活动</a></li><li><a href="https://segmentfault.com/tags">标签</a></li><li><a href="https://segmentfault.com/jobs">找工作</a></li><li><a href="https://segmentfault.com/users">排行榜</a></li><li><a href="https://segmentfault.com/badges">徽章</a></li><li><a href="https://segmentfault.com/notes">笔记</a></li><li><a href="https://docs.segmentfault.com/" target="_blank">开发手册<i style="line-height: 20px;font-size: 12px;color: #F5A623;" class="ml10 fa fa-external-link-square"></i></a></li><li><a href="https://business.segmentfault.com/ads?utm_source=sf-header" target="_blank">广告投放<i style="line-height: 20px;font-size: 12px;color: #F5A623;" class="ml10 fa fa-external-link-square"></i></a></li></ul></div></li><li class="menu__item visible-sm-inline-block"><a href="https://segmentfault.com/search"><span class="glyphicon glyphicon-search" style="vertical-align: middle;"></span></a></li></ul><form action="https://segmentfault.com/search" class="header-search  hidden-sm hidden-xs pull-right"><button class="btn btn-link"><span class="sr-only">搜索</span><span class="glyphicon glyphicon-search"></span></button><input id="searchBox" name="q" type="text" placeholder="搜索问题或关键字" class="form-control" value=""></form></div></div><div class="col-sm-4 col-md-3 col-lg-3 text-right"><ul class="opts list-inline hidden-xs"><li class="opts__item"><a href="https://segmentfault.com/user/login" class="SFRegister btn-signin" style="margin-bottom:2px;">立即登录</a><a href="https://segmentfault.com/user/register" class="SFLogin ml10 btn-signup" onclick="_gaq.push([&#39;_trackEvent&#39;, &#39;Button&#39;, &#39;Click&#39;, &#39;Login&#39;]);">免费注册</a></li></ul></div></div></nav></div>
+    
+<input id="articleId" value="1190000008484167" class="hidden">
+
+<div class="wrap" data-blogid="1200000008322700">
+    <div class="container mt15" style="position:relative">
+        <div class="row">
+            <div class="col-xs-12 col-md-9 main ">
+                                <ol class="breadcrumb mb15">
+                    <li><a href="https://segmentfault.com/blogs">专栏</a></li>
+                                        <li><a href="https://segmentfault.com/blog/a_ds">经典算法与数据结构</a></li>
+                                        <li class="active">文章详情</li>
+                </ol>
+                                <div class="post-topheader custom- pt0">
+                    <div class="mb20">
+                        <div class="block-for-right-border">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                
+
+                                    <div class="post-topheader__info" data-username="刘毅" data-userslug="limer" data-useravatar="https://avatar-static.segmentfault.com/282/934/2829345451-58aabb2b1e761_big64">
+
+
+                                        <div class="article__author clearfix">
+                                            <div class="article__authorleft">
+                                                <a href="https://segmentfault.com/u/limer">
+                                                    <img class="avatar-40" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/2829345451-58aabb2b1e761_big64" alt="刘毅">
+                                                </a>
+                                            </div>
+                                            <div class="article__authorright">
+                                                <div class="article__authormeta">
+                                                <a href="https://segmentfault.com/u/limer" class="mr5 "><strong>刘毅</strong></a>
+
+                                                                                                <img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/rp.svg" class="mr5"><span style="color:#BF7158" class="mr10">1.1k</span>
+
+                                                                                                发布于
+                                                <a href="https://segmentfault.com/blog/a_ds">经典算法与数据结构</a>
+                                                
+                                                
+                                                <span class="hidden-xs">
+                                                                                                                                                          <button type="button" class="btn btn-xs btn-success follow-article ml10" data-do="follow" data-type="blog" data-id="1200000008322700">关注专栏
+                                                       </button>
+                                                                                                                                                   </span>
+                                                </div>
+                                                
+                                                <span style="display: block">
+                                                    2017-02-25 发布
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <h1 class="h1 post-topheader__info--title" id="articleTitle" data-id="1190000008484167">
+                                            <a href="https://segmentfault.com/a/1190000008484167"> Manacher算法</a>
+                                        </h1>
+
+                                        <div class="content__tech hidden-xs">
+                                            <a href="https://segmentfault.com/a/1190000008484167" class="blog-type-common blog-type-1-before" target="_blank" data-content="
+                                                                                        原创
+                                                                                        "></a>
+                                            
+                                            <ul class="taglist--inline inline-block article__title--tag mr10">
+                                                                                                    <li class="tagPopup mb5">
+                                                        <a class="tag" href="https://segmentfault.com/t/c%2B%2B/blogs" data-toggle="popover" data-img="https://avatar-static.segmentfault.com/368/178/3681786295-1040000000089741_big64" data-placement="top" data-original-title="c++" data-id="1040000000089741">
+                                                                                                                      c++
+                                                        </a>
+                                                    </li>
+                                                                                                    <li class="tagPopup mb5">
+                                                        <a class="tag" href="https://segmentfault.com/t/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/blogs" data-toggle="popover" data-img="https://avatar-static.segmentfault.com/136/221/1362214125-1040000000090074_big64" data-placement="top" data-original-title="数据结构" data-id="1040000000090074">
+                                                                                                                      数据结构
+                                                        </a>
+                                                    </li>
+                                                                                                    <li class="tagPopup mb5">
+                                                        <a class="tag" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95/blogs" data-toggle="popover" data-img="https://avatar-static.segmentfault.com/307/849/3078499334-1040000000089524_big64" data-placement="top" data-original-title="算法" data-id="1040000000089524">
+                                                                                                                      算法
+                                                        </a>
+                                                    </li>
+                                                                                            </ul>
+
+                                            <span>
+                                                22.8k 次阅读
+                                                &nbsp;·&nbsp;
+                                                读完需要 13 分钟 
+                                                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end .post-topheader -->
+
+                <div class="visible-lg">
+                    <div class="side-widget">
+                        <div class="stream__item-zan btn btn-default mt0 mb15 ml0 mr0 pt0 pb0 pl0 pr0 " id="side-widget-votes-btn">
+                            <span class="stream__item-zan-icon"></span>
+                            <span class="stream__item-zan-number" id="side-widget-votes-num">19</span>
+                        </div>
+
+                        <i class="fa fa-bookmark item " id="side-widget-bookmarks-btn"></i>
+                        <i class="fa fa-weibo item"></i>
+                        <i class="fa fa-weixin item" data-toggle="popover" data-placement="right" data-original-title="" title=""></i>
+                        <i class="fa fa-twitter item"></i>
+                        <i class="fa fa-facebook item"></i>
+                        <i class="fa fa-arrow-up item hidden"></i>
+                    </div>
+                </div>
+
+                
+                <div class="article fmt article__content" data-id="1190000008484167" data-license="cc">
+                    
+<blockquote>原文链接：<a href="https://subetter.com/articles/manacher-algorithm.html" rel="nofollow noreferrer" target="_blank">https://subetter.com/articles...</a>
+</blockquote>
+<h2 id="articleHeader0">一：背景</h2>
+<p>给定一个字符串，求出其最长回文子串。例如：</p>
+<ol>
+<li>s="abcd"，最长回文长度为 1；</li>
+<li>s="ababa"，最长回文长度为 5；</li>
+<li>s="abccb"，最长回文长度为 4，即bccb。</li>
+</ol>
+<p>以上问题的传统思路大概是，遍历每一个字符，以该字符为中心向两边查找。其时间复杂度为<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style=""><nobr><span class="math" id="MathJax-Span-1" role="math" style="width: 3.203em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.563em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.336em, 1002.46em, 2.776em, -999.997em); top: -2.344em; left: 0.003em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math-italic;">O</span><span class="mo" id="MathJax-Span-4" style="font-family: MathJax_Main;">(</span><span class="msubsup" id="MathJax-Span-5"><span style="display: inline-block; position: relative; width: 1.016em; height: 0px;"><span style="position: absolute; clip: rect(3.416em, 1000.59em, 4.163em, -999.997em); top: -3.997em; left: 0.003em;"><span class="mi" id="MathJax-Span-6" style="font-family: MathJax_Math-italic;">n</span><span style="display: inline-block; width: 0px; height: 4.003em;"></span></span><span style="position: absolute; top: -4.371em; left: 0.589em;"><span class="mn" id="MathJax-Span-7" style="font-size: 70.7%; font-family: MathJax_Main;">2</span><span style="display: inline-block; width: 0px; height: 4.003em;"></span></span></span></span><span class="mo" id="MathJax-Span-8" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.349em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.397em; border-left: 0px solid; width: 0px; height: 1.47em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-1">O(n^2)</script>，效率很差。</p>
+<p>1975年，一个叫Manacher的人发明了一个算法，Manacher算法（中文名：马拉车算法），该算法可以把时间复杂度提升到<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style=""><nobr><span class="math" id="MathJax-Span-9" role="math" style="width: 2.669em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.136em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.443em, 1002.03em, 2.776em, -999.997em); top: -2.344em; left: 0.003em;"><span class="mrow" id="MathJax-Span-10"><span class="mi" id="MathJax-Span-11" style="font-family: MathJax_Math-italic;">O</span><span class="mo" id="MathJax-Span-12" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-13" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-14" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.349em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.397em; border-left: 0px solid; width: 0px; height: 1.403em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-2">O(n)</script>。下面来看看马拉车算法是如何工作的。</p>
+<h2 id="articleHeader1">二：算法过程分析</h2>
+<p>由于回文分为偶回文（比如 bccb）和奇回文（比如 bcacb），而在处理奇偶问题上会比较繁琐，所以这里我们使用一个技巧，具体做法是：在字符串首尾，及各字符间各插入一个字符（前提这个字符未出现在串里）。</p>
+<p>举个例子：<code>s="abbahopxpo"</code>，转换为<code>s_new="$#a#b#b#a#h#o#p#x#p#o#"</code>（这里的字符 $ 只是为了防止越界，下面代码会有说明），如此，s 里起初有一个偶回文<code>abba</code>和一个奇回文<code>opxpo</code>，被转换为<code>#a#b#b#a#</code>和<code>#o#p#x#p#o#</code>，长度都转换成了<strong>奇数</strong>。</p>
+<p>定义一个辅助数组<code>int p[]</code>，其中<code>p[i]</code>表示以 i 为中心的最长回文的半径，例如：</p>
+<table>
+<thead><tr>
+<th align="center">i</th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+<th align="center">6</th>
+<th align="center">7</th>
+<th align="center">8</th>
+<th align="center">9</th>
+<th align="center">10</th>
+<th align="center">11</th>
+<th align="center">12</th>
+<th align="center">13</th>
+<th align="center">14</th>
+<th align="center">15</th>
+<th align="center">16</th>
+<th align="center">17</th>
+<th align="center">18</th>
+<th align="center">19</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">s_new[i]</td>
+<td align="center">$</td>
+<td align="center">#</td>
+<td align="center">a</td>
+<td align="center">#</td>
+<td align="center">b</td>
+<td align="center">#</td>
+<td align="center">b</td>
+<td align="center">#</td>
+<td align="center">a</td>
+<td align="center">#</td>
+<td align="center">h</td>
+<td align="center">#</td>
+<td align="center">o</td>
+<td align="center">#</td>
+<td align="center">p</td>
+<td align="center">#</td>
+<td align="center">x</td>
+<td align="center">#</td>
+<td align="center">p</td>
+<td align="center">#</td>
+</tr>
+<tr>
+<td align="center">p[i]</td>
+<td align="center"> </td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p>可以看出，<code>p[i] - 1</code>正好是原字符串中最长回文串的长度。</p>
+<p>接下来的重点就是求解 p 数组，如下图：<br><span class="img-wrap"><img data-src="https://subetter.com/images/figures/20180331_01.png" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20180331_01.png" alt="" title="" style="cursor: pointer; display: inline;"></span><br>设置两个变量，mx 和 id 。mx 代表以 id 为中心的最长回文的右边界，也就是<code>mx = id + p[id]</code>。</p>
+<p>假设我们现在求<code>p[i]</code>，也就是以 i 为中心的最长回文半径，如果<code>i &lt; mx</code>，如上图，那么：</p>
+<div class="widget-codetool" style="display: none;">
+      <div class="widget-codetool--inner">
+      <span class="selectCode code-tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="全选"></span>
+      <span type="button" class="copyCode code-tool" data-toggle="tooltip" data-placement="top" data-clipboard-text="if (i &lt; mx)  
+    p[i] = min(p[2 * id - i], mx - i);" title="" data-original-title="复制"></span>
+      </div>
+      </div><pre class="hljs objectivec"><code class="c++"><span class="hljs-keyword">if</span> (i &lt; mx)  
+    p[i] = min(p[<span class="hljs-number">2</span> * <span class="hljs-keyword">id</span> - i], mx - i);</code></pre>
+<p><code>2 * id - i</code>为 i 关于 id 的对称点，即上图的 j 点，而<strong><code>p[j]</code>表示以 j 为中心的最长回文半径</strong>，因此我们可以利用<code>p[j]</code>来加快查找。</p>
+<h2 id="articleHeader2">三：代码</h2>
+<div class="widget-codetool" style="display: none;">
+      <div class="widget-codetool--inner">
+      <span class="selectCode code-tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="全选"></span>
+      <span type="button" class="copyCode code-tool" data-toggle="tooltip" data-placement="top" data-clipboard-text="#include &lt;iostream&gt;  
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;  
+
+using namespace std;
+
+char s[1000];
+char s_new[2000];
+int p[2000];
+
+int Init()
+{
+    int len = strlen(s);
+    s_new[0] = &#39;$&#39;;
+    s_new[1] = &#39;#&#39;;
+    int j = 2;
+
+    for (int i = 0; i &lt; len; i++)
+    {
+        s_new[j++] = s[i];
+        s_new[j++] = &#39;#&#39;;
+    }
+
+    s_new[j] = &#39;\0&#39;;  // 别忘了哦
+    
+    return j;  // 返回 s_new 的长度
+}
+
+int Manacher()
+{
+    int len = Init();  // 取得新字符串长度并完成向 s_new 的转换
+    int max_len = -1;  // 最长回文长度
+
+    int id;
+    int mx = 0;
+
+    for (int i = 1; i &lt; len; i++)
+    {
+        if (i &lt; mx)
+            p[i] = min(p[2 * id - i], mx - i);  // 需搞清楚上面那张图含义, mx 和 2*id-i 的含义
+        else
+            p[i] = 1;
+
+        while (s_new[i - p[i]] == s_new[i + p[i]])  // 不需边界判断，因为左有&#39;$&#39;,右有&#39;\0&#39;
+            p[i]++;
+
+        // 我们每走一步 i，都要和 mx 比较，我们希望 mx 尽可能的远，这样才能更有机会执行 if (i &lt; mx)这句代码，从而提高效率
+        if (mx &lt; i + p[i])
+        {
+            id = i;
+            mx = i + p[i];
+        }
+
+        max_len = max(max_len, p[i] - 1);
+    }
+
+    return max_len;
+}
+
+int main()
+{
+    while (printf(&quot;请输入字符串：\n&quot;))
+    {
+        scanf(&quot;%s&quot;, s);
+        printf(&quot;最长回文长度为 %d\n\n&quot;, Manacher());
+    }
+    return 0;
+}" title="" data-original-title="复制"></span>
+      </div>
+      </div><pre class="hljs cpp"><code class="c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;  </span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;  </span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+
+<span class="hljs-keyword">char</span> s[<span class="hljs-number">1000</span>];
+<span class="hljs-keyword">char</span> s_new[<span class="hljs-number">2000</span>];
+<span class="hljs-keyword">int</span> p[<span class="hljs-number">2000</span>];
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">Init</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">int</span> len = <span class="hljs-built_in">strlen</span>(s);
+    s_new[<span class="hljs-number">0</span>] = <span class="hljs-string">'$'</span>;
+    s_new[<span class="hljs-number">1</span>] = <span class="hljs-string">'#'</span>;
+    <span class="hljs-keyword">int</span> j = <span class="hljs-number">2</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++)
+    {
+        s_new[j++] = s[i];
+        s_new[j++] = <span class="hljs-string">'#'</span>;
+    }
+
+    s_new[j] = <span class="hljs-string">'\0'</span>;  <span class="hljs-comment">// 别忘了哦</span>
+    
+    <span class="hljs-keyword">return</span> j;  <span class="hljs-comment">// 返回 s_new 的长度</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">Manacher</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">int</span> len = Init();  <span class="hljs-comment">// 取得新字符串长度并完成向 s_new 的转换</span>
+    <span class="hljs-keyword">int</span> max_len = <span class="hljs-number">-1</span>;  <span class="hljs-comment">// 最长回文长度</span>
+
+    <span class="hljs-keyword">int</span> id;
+    <span class="hljs-keyword">int</span> mx = <span class="hljs-number">0</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; len; i++)
+    {
+        <span class="hljs-keyword">if</span> (i &lt; mx)
+            p[i] = min(p[<span class="hljs-number">2</span> * id - i], mx - i);  <span class="hljs-comment">// 需搞清楚上面那张图含义, mx 和 2*id-i 的含义</span>
+        <span class="hljs-keyword">else</span>
+            p[i] = <span class="hljs-number">1</span>;
+
+        <span class="hljs-keyword">while</span> (s_new[i - p[i]] == s_new[i + p[i]])  <span class="hljs-comment">// 不需边界判断，因为左有'$',右有'\0'</span>
+            p[i]++;
+
+        <span class="hljs-comment">// 我们每走一步 i，都要和 mx 比较，我们希望 mx 尽可能的远，这样才能更有机会执行 if (i &lt; mx)这句代码，从而提高效率</span>
+        <span class="hljs-keyword">if</span> (mx &lt; i + p[i])
+        {
+            id = i;
+            mx = i + p[i];
+        }
+
+        max_len = max(max_len, p[i] - <span class="hljs-number">1</span>);
+    }
+
+    <span class="hljs-keyword">return</span> max_len;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">printf</span>(<span class="hljs-string">"请输入字符串：\n"</span>))
+    {
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%s"</span>, s);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"最长回文长度为 %d\n\n"</span>, Manacher());
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre>
+<h2 id="articleHeader3">四：算法复杂度分析</h2>
+<p>文章开头已经提及，Manacher算法为线性算法，即使最差情况下其时间复杂度亦为<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-3-Frame" tabindex="0" style=""><nobr><span class="math" id="MathJax-Span-15" role="math" style="width: 2.669em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.136em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.443em, 1002.03em, 2.776em, -999.997em); top: -2.344em; left: 0.003em;"><span class="mrow" id="MathJax-Span-16"><span class="mi" id="MathJax-Span-17" style="font-family: MathJax_Math-italic;">O</span><span class="mo" id="MathJax-Span-18" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-19" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-20" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.349em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.397em; border-left: 0px solid; width: 0px; height: 1.403em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-3">O(n)</script>，在进行证明之前，我们还需要更加深入地理解上述算法过程。</p>
+<p>根据回文的性质，<code>p[i]</code>的值基于以下三种情况得出：</p>
+<p>（1）：<strong>j 的回文串有一部分在 id 的之外</strong>，如下图：<br><span class="img-wrap"><img data-src="https://subetter.com/images/figures/20180331_02.png" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20180331_02.png" alt="" title="" style="cursor: pointer; display: inline;"></span><br>上图中，黑线为 id 的回文，i 与 j 关于 id 对称，红线为 j 的回文。那么根据代码此时<code>p[i] = mx - i</code>，即紫线。那么<code>p[i]</code>还可以更大么？答案是不可能！见下图：<br><span class="img-wrap"><img data-src="https://subetter.com/images/figures/20180331_03.png" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20180331_03.png" alt="" title="" style="cursor: pointer; display: inline;"></span><br>假设右侧新增的紫色部分是<code>p[i]</code>可以增加的部分，那么根据回文的性质，a 等于 d ，也就是说 id 的回文不仅仅是黑线，而是黑线+两条紫线，矛盾，所以假设不成立，故<code>p[i] = mx - i</code>，不可以再增加一分。</p>
+<p>（2）：<strong>j 回文串全部在 id 的内部</strong>，如下图：<br><span class="img-wrap"><img data-src="https://subetter.com/images/figures/20180331_04.png" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20180331_04.png" alt="" title="" style="cursor: pointer; display: inline;"></span><br>根据代码，此时<code>p[i] = p[j]</code>，那么<code>p[i]</code>还可以更大么？答案亦是不可能！见下图：<br><span class="img-wrap"><img data-src="https://subetter.com/images/figures/20180331_05.png" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20180331_05.png" alt="" title="" style="cursor: pointer; display: inline;"></span><br>假设右侧新增的红色部分是<code>p[i]</code>可以增加的部分，那么根据回文的性质，a 等于 b ，也就是说 j 的回文应该再加上 a 和 b ，矛盾，所以假设不成立，故<code>p[i] = p[j]</code>，也不可以再增加一分。</p>
+<p>（3）：<strong>j 回文串左端正好与 id 的回文串左端重合</strong>，见下图：<br><span class="img-wrap"><img data-src="https://subetter.com/images/figures/20180331_06.png" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20180331_06.png" alt="" title="" style="cursor: pointer; display: inline;"></span><br>根据代码，此时<code>p[i] = p[j]</code>或<code>p[i] = mx - i</code>，并且<code>p[i]</code>还可以继续增加，所以需要</p>
+<div class="widget-codetool" style="display: none;">
+      <div class="widget-codetool--inner">
+      <span class="selectCode code-tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="全选"></span>
+      <span type="button" class="copyCode code-tool" data-toggle="tooltip" data-placement="top" data-clipboard-text="while (s_new[i - p[i]] == s_new[i + p[i]]) 
+    p[i]++;" title="" data-original-title="复制"></span>
+      </div>
+      </div><pre class="hljs objectivec"><code class="c++"><span class="hljs-keyword">while</span> (s_new[i - p[i]] == s_new[i + p[i]]) 
+    p[i]++;</code></pre>
+<p>根据（1）（2）（3），很容易推出Manacher算法的最坏情况，即为字符串内全是相同字符的时候。在这里我们重点研究Manacher（）中的for语句，推算发现for语句内平均访问每个字符5次，即时间复杂度为：<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-4-Frame" tabindex="0" style=""><nobr><span class="math" id="MathJax-Span-21" role="math" style="width: 9.016em; display: inline-block;"><span style="display: inline-block; position: relative; width: 7.203em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.443em, 1007.1em, 2.776em, -999.997em); top: -2.344em; left: 0.003em;"><span class="mrow" id="MathJax-Span-22"><span class="msubsup" id="MathJax-Span-23"><span style="display: inline-block; position: relative; width: 2.403em; height: 0px;"><span style="position: absolute; clip: rect(3.149em, 1000.7em, 4.163em, -999.997em); top: -3.997em; left: 0.003em;"><span class="mi" id="MathJax-Span-24" style="font-family: MathJax_Math-italic;">T<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.109em;"></span></span><span style="display: inline-block; width: 0px; height: 4.003em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.589em;"><span class="texatom" id="MathJax-Span-25"><span class="mrow" id="MathJax-Span-26"><span class="mi" id="MathJax-Span-27" style="font-size: 70.7%; font-family: MathJax_Math-italic;">w</span><span class="mi" id="MathJax-Span-28" style="font-size: 70.7%; font-family: MathJax_Math-italic;">o</span><span class="mi" id="MathJax-Span-29" style="font-size: 70.7%; font-family: MathJax_Math-italic;">r</span><span class="mi" id="MathJax-Span-30" style="font-size: 70.7%; font-family: MathJax_Math-italic;">s</span><span class="mi" id="MathJax-Span-31" style="font-size: 70.7%; font-family: MathJax_Math-italic;">t</span></span></span><span style="display: inline-block; width: 0px; height: 4.003em;"></span></span></span></span><span class="mo" id="MathJax-Span-32" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-33" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-34" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-35" style="font-family: MathJax_Main; padding-left: 0.269em;">=</span><span class="mi" id="MathJax-Span-36" style="font-family: MathJax_Math-italic; padding-left: 0.269em;">O</span><span class="mo" id="MathJax-Span-37" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-38" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-39" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.349em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.397em; border-left: 0px solid; width: 0px; height: 1.403em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-4">T_{worst}(n)=O(n)</script>。</p>
+<p>同理，我们也很容易知道最佳情况下的时间复杂度，即字符串内字符各不相同的时候。推算得平均访问每个字符4次，即时间复杂度为：<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-5-Frame" tabindex="0" style=""><nobr><span class="math" id="MathJax-Span-40" role="math" style="width: 8.376em; display: inline-block;"><span style="display: inline-block; position: relative; width: 6.669em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.443em, 1006.56em, 2.776em, -999.997em); top: -2.344em; left: 0.003em;"><span class="mrow" id="MathJax-Span-41"><span class="msubsup" id="MathJax-Span-42"><span style="display: inline-block; position: relative; width: 1.869em; height: 0px;"><span style="position: absolute; clip: rect(3.149em, 1000.7em, 4.163em, -999.997em); top: -3.997em; left: 0.003em;"><span class="mi" id="MathJax-Span-43" style="font-family: MathJax_Math-italic;">T<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.109em;"></span></span><span style="display: inline-block; width: 0px; height: 4.003em;"></span></span><span style="position: absolute; top: -3.837em; left: 0.589em;"><span class="texatom" id="MathJax-Span-44"><span class="mrow" id="MathJax-Span-45"><span class="mi" id="MathJax-Span-46" style="font-size: 70.7%; font-family: MathJax_Math-italic;">b</span><span class="mi" id="MathJax-Span-47" style="font-size: 70.7%; font-family: MathJax_Math-italic;">e</span><span class="mi" id="MathJax-Span-48" style="font-size: 70.7%; font-family: MathJax_Math-italic;">s</span><span class="mi" id="MathJax-Span-49" style="font-size: 70.7%; font-family: MathJax_Math-italic;">t</span></span></span><span style="display: inline-block; width: 0px; height: 4.003em;"></span></span></span></span><span class="mo" id="MathJax-Span-50" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-51" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-52" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-53" style="font-family: MathJax_Main; padding-left: 0.269em;">=</span><span class="mi" id="MathJax-Span-54" style="font-family: MathJax_Math-italic; padding-left: 0.269em;">O</span><span class="mo" id="MathJax-Span-55" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-56" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-57" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.349em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.397em; border-left: 0px solid; width: 0px; height: 1.403em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-5">T_{best}(n)=O(n)</script>。</p>
+<p>综上，<strong>Manacher算法的时间复杂度为<span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-6-Frame" tabindex="0" style=""><nobr><span class="math" id="MathJax-Span-58" role="math" style="width: 2.669em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.136em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.443em, 1002.03em, 2.776em, -999.997em); top: -2.344em; left: 0.003em;"><span class="mrow" id="MathJax-Span-59"><span class="mi" id="MathJax-Span-60" style="font-family: MathJax_Math-italic;">O</span><span class="mo" id="MathJax-Span-61" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-62" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-63" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.349em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.397em; border-left: 0px solid; width: 0px; height: 1.403em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-6">O(n)</script></strong>。</p>
+
+                </div>
+                                                
+                <div class="clearfix mt10">
+                    <ul class="article-operation list-inline pull-left mt15"><li><a target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><img class="mb5" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/creativecommons-cc.svg" height="20"></a></li><li class="dropdown js__content-ops hidden-xs" data-module="article" data-id="1190000008484167" data-typetext="文章"><a href="javascript:void(0);" class="dropdown-toggle text-muted" data-toggle="dropdown"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a><ul class="dropdown-menu dropdown-menu-left"><li><a href="https://segmentfault.com/a/1190000008484167#911" data-toggle="modal" data-target="#911" data-action="report">举报</a></li></ul></li></ul>
+                    <div class="pull-right mt-10 hidden-xs">
+                        <div class="widget-share__full" data-text="Manacher算法" data-url="https://segmentfault.com/a/1190000008484167" data-shorturl="http://sfau.lt/b5JLhz"><div class="widget-share-network sharer-0" style="display: block;"><ul class="sn-inline"><li data-network="weibo"><a href="javascript:void(0);" class="entypo-weibo icon-sn-weibo share-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="分享至新浪微博">新浪微博</a></li><li data-network="wechart"><a href="javascript:void(0);" class="entypo-wechart icon-sn-weixin share-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="分享至微信">微信</a></li><li data-network="twitter"><a href="javascript:void(0);" class="entypo-twitter icon-sn-twitter share-3" data-toggle="tooltip" data-placement="top" title="" data-original-title="分享至 Twitter">Twitter</a></li><li data-network="facebook"><a href="javascript:void(0);" class="entypo-facebook icon-sn-facebook share-4" data-toggle="tooltip" data-placement="top" title="" data-original-title="分享至 Facebook">Facebook</a></li></ul></div><a type="button" class="btn btn-sm shareMore btn-sn-more" data-toggle="popover" data-placement="top" data-url="https://segmentfault.com/a/1190000008484167" data-shorturl="http://sfau.lt/b5JLhz"><span class="icon-sn-dotted" data-original-title="" title=""></span><strong class="visible-xs-inline">•••</strong></a></div>
+
+
+                    </div>
+                </div>
+                <div class="mt10 text-center mb30"><button type="button" id="mainLike" data-id="1190000008484167" class="btn btn-success btn-lg mr15 "><span id="mainLikeText">赞</span>&nbsp;&nbsp;<span class="seprator">|</span>&nbsp;&nbsp;
+                                <span id="mainLikeNum">19 </span></button><button type="button" id="mainBookmark" data-type="article" data-id="1190000008484167" class="btn btn-default btn-lg "><span id="mainBookmarkText">收藏</span>&nbsp;&nbsp;<span class="seprator">|</span>&nbsp;&nbsp;<span id="mainBookmarkNum">11</span></button><br><button type="button" data-id="1190000008484167" class="btn btn-danger btn-lg mt15 article__reward-btn">
+                                    赞赏支持
+                                </button></div><div class="mt30 mb30 text-center article__reward-info"><span class="mr10">如果觉得我的文章对你有用，请随意赞赏</span></div>                
+                                <script type="text/javascript">
+                    OA_show(3);
+                </script><div style="text-align: center; line-height: 0; background: #EEE"><script async="" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/f(2).txt"></script>
+<!-- 中部横幅广告位 -->
+<ins class="adsbygoogle" style="display: inline-block; width: 728px; height: 0px;" data-ad-client="ca-pub-6330872677300335" data-ad-slot="5598290435" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display: inline-table; border: none; height: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; width: 728px; background-color: transparent;"><ins id="aswift_0_anchor" style="display: block; border: none; height: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; width: 728px; background-color: transparent; overflow: hidden; opacity: 0;"><iframe width="728" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0px;width:728px;height:90px;" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/saved_resource.html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script><div id="beacon_feb5bb4e29" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg.php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div></div>
+
+
+                <h4 class="pt20 mb15 mt0 border-top">你可能感兴趣的</h4>
+
+                
+                <div class="mb15 block">
+                    <script type="text/javascript">
+                        OA_show(4);
+                    </script><div id="beacon_30422acc51" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg(1).php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+
+                </div>
+
+                                <div id="paradigm-article-related"><div class="recommend-post mb30"><ul class="widget-links"><li><a href="http://segmentfault.com/a/1190000016239464" title="[LeetCode]最长回文子串（Longest Palindromic Substring）" target="_blank">[LeetCode]最长回文子串（Longest Palindromic Substring）</a><span class="text-muted">LieRabbit</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95">算法</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/leetcode">leetcode</a></li><li><a href="http://segmentfault.com/a/1190000003914228" title="最长回文子串——Manacher 算法" target="_blank">最长回文子串——Manacher 算法</a><span class="text-muted">曾会玩</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/python">python</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95">算法</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86">字符串处理</a></li><li><a href="http://segmentfault.com/a/1190000005063336" title="最长回文子串问题" target="_blank">最长回文子串问题</a><span class="text-muted">cppowboy</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E5%AD%97%E7%AC%A6%E4%B8%B2">字符串</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95">算法</a></li><li><a href="http://segmentfault.com/a/1190000002694646" title="July算法习题 -  字符串1" target="_blank">July算法习题 -  字符串1</a><span class="text-muted">SecondLife</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/java">java</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95">算法</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E5%AD%97%E7%AC%A6%E4%B8%B2">字符串</a></li><li><a href="http://segmentfault.com/a/1190000011549629" title="Longest Valid Parentheses" target="_blank">Longest Valid Parentheses</a><span class="text-muted">Caesar</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/c%2B%2B">c++</a></li><li><a href="http://segmentfault.com/a/1190000015461094" title="字符串匹配模式问题" target="_blank">字符串匹配模式问题</a><span class="text-muted">dailybird</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">正则表达式</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95">算法</a></li><li><a href="http://segmentfault.com/a/1190000002991199" title="[Leetcode] Longest Palindromic Substring 最长回文子字符串" target="_blank">[Leetcode] Longest Palindromic Substring 最长回文子字符串</a><span class="text-muted">ethannnli</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/java">java</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95">算法</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/leetcode">leetcode</a></li><li><a href="http://segmentfault.com/a/1190000015593363" title="排序算法学习笔记" target="_blank">排序算法学习笔记</a><span class="text-muted">bitsignal</span><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E7%AE%97%E6%B3%95">算法</a><a class="tag" taget="_blank" href="https://segmentfault.com/t/%E6%8E%92%E5%BA%8F">排序</a></li></ul></div></div>
+
+                
+        <div class="comments--news comments--default comments--article 
+    " data-id="1190000008484167" data-user-id="" data-author-id="1030000006098599 " data-is-admin="null" id="goToReplyArea">
+                    <div class="mb10 clearfix">
+                <strong class="comments-stat pull-left mr10">13 条评论</strong>
+
+                                                    <div class="btn-group btn-group-xs pull-right comments-sort btn-group-menu" role="menu">
+                        <a href="javascript:;" class="btn btn-default active" data-sort="default">默认排序</a>
+                        <a href="javascript:;" class="btn btn-default" data-sort="desc">时间排序</a>
+                    </div>
+                            </div>
+                <div class="comments-container">
+                                <div class="comments-list">
+                <div class="comments-item" data-id="1050000013798934">
+            <div class="pull-left">
+                <a href="https://segmentfault.com/u/followstep" target="_blank"><img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/user-64.png" alt=""></a>
+            </div>
+            <div class="comments-content">
+                <div class="comment-trigger">
+                    <div class="pull-right comment-option">
+                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-action="report" data-action-text="举报" data-module="comment" data-id="1050000013798934" data-typetext="评论" data-placement="top" title="举报"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
+                                            </div>
+                    <strong><a target="_blank" href="https://segmentfault.com/u/followstep">followStep</a></strong>
+                    <span class="comments-isAuthor hide"></span>
+                    <span class="comments-date">  ·  3月17日</span>
+                </div>
+
+                <div class="fmt mb10"><p>id变量没有初始化，后面直接就用了 p[i] = min(p[2 * id - i], mx - i);</p></div>
+
+                <form action="https://segmentfault.com/api/comment/1050000013798934/edit">
+                    <div class="form-group">
+                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">id变量没有初始化，后面直接就用了 p[i] = min(p[2 * id - i], mx - i);</textarea>
+                    </div>
+                </form>
+
+                <p class="comment-ops not-reply">
+                    <span class="comments-zan ">
+                        <i class="fa fa-thumbs-up mr4" aria-hidden="true"></i>
+                        <span class="comments-zan-text">赞</span>
+                        <span class="comments-zan-value">+1</span>
+                    </span>
+                    
+                    <span class="ml15 comments-reply-btn">回复</span>
+
+                    <span class="pull-right editBtns hidden">
+                      <button class="btn btn-link btn-xs cancel" type="button">取消</button>
+                      <button class="btn btn-primary btn-xs edit ml10" type="button">保存</button>
+                    </span>
+                </p>
+
+                <div class="reply-list ">
+
+                    
+                        <div class="reply-item" data-id="1050000013802551">
+                            <span class="pull-left comment-ops " style="position:absolute;">
+                                <span class="mr20 comments-zan ">
+                                    <span class="comments-zan-value comment-showhide
+                                         islike0-10
+                                        ">
+                                        0
+                                    </span>
+                                    <i class="fa fa-thumbs-up comment-showhide ml5" aria-hidden="true"></i>
+                                </span>
+                            </span>
+
+                            <div class="reply-content-block">
+                                <div class="reply-content"><p>我也看到了，那么应该初始化为0吗？</p></div>
+                                <form action="https://segmentfault.com/api/comment/1050000013802551/edit">
+                                    <div class="form-group">
+                                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">我也看到了，那么应该初始化为0吗？</textarea>
+                                    </div>
+                                </form>
+                                <div class="comment-func inline-block">
+                                    
+
+                                    <span class="pull-right commentTools ml15">
+                                                                                                                                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-module="comment" data-id="1050000013802551" data-action="report" data-typetext="评论" data-placement="top" title="举报">
+                                            <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                        </a>
+                                    </span>
+
+                                    <span class="comment-meta inline-block">
+                                        <span> — </span>
+                                        <a target="_blank" href="https://segmentfault.com/u/dadong_5aacf482b2f8a">
+                                            <strong>打洞</strong>
+                                        </a> 
+                                        <span class="comments-isAuthor hide">
+                                            
+                                        </span> 
+                                        <span class="text-muted-plus">  ·  3月17日</span>
+                                                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="reply-item" data-id="1050000013802660">
+                            <span class="pull-left comment-ops " style="position:absolute;">
+                                <span class="mr20 comments-zan ">
+                                    <span class="comments-zan-value comment-showhide
+                                         islike0-10
+                                        ">
+                                        0
+                                    </span>
+                                    <i class="fa fa-thumbs-up comment-showhide ml5" aria-hidden="true"></i>
+                                </span>
+                            </span>
+
+                            <div class="reply-content-block">
+                                <div class="reply-content">
+<p>//这是我写的一个版本，调试过了，你可以参考一下<br>//#define LOCALE</p>
+include &lt;cstdio&gt;
+include &lt;cstring&gt;
+include &lt;algorithm&gt;
+<p>using namespace std;</p>
+define MAXLEN 100000
+<p>char str[MAXLEN];<br>char assi[MAXLEN*2];<br>int r[MAXLEN*2];</p>
+<p>void init();<br>int manacher();<br>int main()<br>{</p>
+ifdef LOCALE
+<pre><code>freopn(".in", "r", stdin)
+freopen(".out", "w", stdout)</code></pre>
+endif
+<pre><code>scanf("%s", str);
+init();
+int maxLen = manacher();
+
+printf("%d", maxLen);
+
+return 0;</code></pre>
+<p>}</p>
+<p>void init()<br>{</p>
+<pre><code>int len = strlen(str);
+assi[0] = '#';
+int j = 1;
+for(int i=0; i&lt;len; i++){
+    assi[j++] = str[i];
+    assi[j++] = '#';
+}
+assi[j] = '\0';</code></pre>
+<p>}</p>
+<p>int manacher()<br>{</p>
+<pre><code>int len = strlen(assi);
+int bound=0, cent=0;
+int maxLen = 0;
+for(int i=0; i&lt;len; i++){
+    if(i &lt; bound)
+        r[i] = min(r[2*cent-i], bound-i+1);
+    else
+        r[i] = 1;
+        
+    while(i-r[i]&gt;=0 &amp;&amp; i+r[i]&lt;len &amp;&amp; assi[i-r[i]] == assi[i+r[i]])
+        r[i]++;
+        
+    if(bound &lt; i+r[i]-1){
+        cent = i;
+        bound = i+r[i]-1;
+    }
+    
+    if(r[i]-1 &gt; maxLen)
+        maxLen = r[i]-1;
+}
+
+return maxLen;</code></pre>
+<p>}</p>
+</div>
+                                <form action="https://segmentfault.com/api/comment/1050000013802660/edit">
+                                    <div class="form-group">
+                                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">//这是我写的一个版本，调试过了，你可以参考一下
+//#define LOCALE
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define MAXLEN 100000
+char str[MAXLEN];
+char assi[MAXLEN*2];
+int r[MAXLEN*2];
+
+void init();
+int manacher();
+int main()
+{
+#ifdef LOCALE
+	freopn(".in", "r", stdin)
+	freopen(".out", "w", stdout)
+#endif
+
+	scanf("%s", str);
+	init();
+	int maxLen = manacher();
+	
+	printf("%d", maxLen);
+
+	return 0;
+}
+
+void init()
+{
+	int len = strlen(str);
+	assi[0] = '#';
+	int j = 1;
+	for(int i=0; i&lt;len; i++){
+		assi[j++] = str[i];
+		assi[j++] = '#';
+	}
+	assi[j] = '\0';
+}
+
+int manacher()
+{
+	int len = strlen(assi);
+	int bound=0, cent=0;
+	int maxLen = 0;
+	for(int i=0; i&lt;len; i++){
+		if(i &lt; bound)
+			r[i] = min(r[2*cent-i], bound-i+1);
+		else
+			r[i] = 1;
+			
+		while(i-r[i]&gt;=0 &amp;&amp; i+r[i]&lt;len &amp;&amp; assi[i-r[i]] == assi[i+r[i]])
+			r[i]++;
+			
+		if(bound &lt; i+r[i]-1){
+			cent = i;
+			bound = i+r[i]-1;
+		}
+		
+		if(r[i]-1 &gt; maxLen)
+			maxLen = r[i]-1;
+	}
+	
+	return maxLen;
+}
+</textarea>
+                                    </div>
+                                </form>
+                                <div class="comment-func inline-block">
+                                    
+
+                                    <span class="pull-right commentTools ml15">
+                                                                                                                                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-module="comment" data-id="1050000013802660" data-action="report" data-typetext="评论" data-placement="top" title="举报">
+                                            <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                        </a>
+                                    </span>
+
+                                    <span class="comment-meta inline-block">
+                                        <span> — </span>
+                                        <a target="_blank" href="https://segmentfault.com/u/followstep">
+                                            <strong>followStep</strong>
+                                        </a> 
+                                        <span class="comments-isAuthor hide">
+                                            
+                                        </span> 
+                                        <span class="text-muted-plus">  ·  3月17日</span>
+                                                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="reply-item" data-id="1050000014416279">
+                            <span class="pull-left comment-ops " style="position:absolute;">
+                                <span class="mr20 comments-zan ">
+                                    <span class="comments-zan-value comment-showhide
+                                         islike0-10
+                                        ">
+                                        0
+                                    </span>
+                                    <i class="fa fa-thumbs-up comment-showhide ml5" aria-hidden="true"></i>
+                                </span>
+                            </span>
+
+                            <div class="reply-content-block">
+                                <div class="reply-content"><p>第一次for循环的时候，p[i] = min(p[2 * id - i], mx - i)是肯定不会执行的, because i &gt; mx.</p></div>
+                                <form action="https://segmentfault.com/api/comment/1050000014416279/edit">
+                                    <div class="form-group">
+                                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">第一次for循环的时候，p[i] = min(p[2 * id - i], mx - i)是肯定不会执行的, because i &gt; mx.</textarea>
+                                    </div>
+                                </form>
+                                <div class="comment-func inline-block">
+                                    
+
+                                    <span class="pull-right commentTools ml15">
+                                                                                                                                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-module="comment" data-id="1050000014416279" data-action="report" data-typetext="评论" data-placement="top" title="举报">
+                                            <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                        </a>
+                                    </span>
+
+                                    <span class="comment-meta inline-block">
+                                        <span> — </span>
+                                        <a target="_blank" href="https://segmentfault.com/u/matrix_5ad0b82428d35">
+                                            <strong>matrix</strong>
+                                        </a> 
+                                        <span class="comments-isAuthor hide">
+                                            
+                                        </span> 
+                                        <span class="text-muted-plus">  ·  4月16日</span>
+                                                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    <div class="reply-item reply-item--ops" data-obj="obj">
+                        <a class="reply-inner-btn" href="javascript:;">添加回复</a>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+                <div class="comments-item" data-id="1050000013077375">
+            <div class="pull-left">
+                <a href="https://segmentfault.com/u/mybing" target="_blank"><img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/user-64.png" alt=""></a>
+            </div>
+            <div class="comments-content">
+                <div class="comment-trigger">
+                    <div class="pull-right comment-option">
+                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-action="report" data-action-text="举报" data-module="comment" data-id="1050000013077375" data-typetext="评论" data-placement="top" title="举报"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
+                                            </div>
+                    <strong><a target="_blank" href="https://segmentfault.com/u/mybing">Mybing</a></strong>
+                    <span class="comments-isAuthor hide"></span>
+                    <span class="comments-date">  ·  2月1日</span>
+                </div>
+
+                <div class="fmt mb10"><p>但是为什么最前面要加一个$呢？</p></div>
+
+                <form action="https://segmentfault.com/api/comment/1050000013077375/edit">
+                    <div class="form-group">
+                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">但是为什么最前面要加一个$呢？</textarea>
+                    </div>
+                </form>
+
+                <p class="comment-ops not-reply">
+                    <span class="comments-zan ">
+                        <i class="fa fa-thumbs-up mr4" aria-hidden="true"></i>
+                        <span class="comments-zan-text">赞</span>
+                        <span class="comments-zan-value"></span>
+                    </span>
+                    
+                    <span class="ml15 comments-reply-btn">回复</span>
+
+                    <span class="pull-right editBtns hidden">
+                      <button class="btn btn-link btn-xs cancel" type="button">取消</button>
+                      <button class="btn btn-primary btn-xs edit ml10" type="button">保存</button>
+                    </span>
+                </p>
+
+                <div class="reply-list ">
+
+                    
+                        <div class="reply-item" data-id="1050000013431172">
+                            <span class="pull-left comment-ops " style="position:absolute;">
+                                <span class="mr20 comments-zan ">
+                                    <span class="comments-zan-value comment-showhide
+                                         islike0-10
+                                        ">
+                                        0
+                                    </span>
+                                    <i class="fa fa-thumbs-up comment-showhide ml5" aria-hidden="true"></i>
+                                </span>
+                            </span>
+
+                            <div class="reply-content-block">
+                                <div class="reply-content"><p>好像是为了防止数组溢出，具体的我还在想</p></div>
+                                <form action="https://segmentfault.com/api/comment/1050000013431172/edit">
+                                    <div class="form-group">
+                                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">好像是为了防止数组溢出，具体的我还在想</textarea>
+                                    </div>
+                                </form>
+                                <div class="comment-func inline-block">
+                                    
+
+                                    <span class="pull-right commentTools ml15">
+                                                                                                                                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-module="comment" data-id="1050000013431172" data-action="report" data-typetext="评论" data-placement="top" title="举报">
+                                            <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                        </a>
+                                    </span>
+
+                                    <span class="comment-meta inline-block">
+                                        <span> — </span>
+                                        <a target="_blank" href="https://segmentfault.com/u/zhangsheng_596c2411a79ef">
+                                            <strong>张胜</strong>
+                                        </a> 
+                                        <span class="comments-isAuthor hide">
+                                            
+                                        </span> 
+                                        <span class="text-muted-plus">  ·  2月28日</span>
+                                                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    <div class="reply-item reply-item--ops" data-obj="obj">
+                        <a class="reply-inner-btn" href="javascript:;">添加回复</a>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+                <div class="comments-item" data-id="1050000013430554">
+            <div class="pull-left">
+                <a href="https://segmentfault.com/u/zhangsheng_596c2411a79ef" target="_blank"><img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/user-64.png" alt=""></a>
+            </div>
+            <div class="comments-content">
+                <div class="comment-trigger">
+                    <div class="pull-right comment-option">
+                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-action="report" data-action-text="举报" data-module="comment" data-id="1050000013430554" data-typetext="评论" data-placement="top" title="举报"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
+                                            </div>
+                    <strong><a target="_blank" href="https://segmentfault.com/u/zhangsheng_596c2411a79ef">张胜</a></strong>
+                    <span class="comments-isAuthor hide"></span>
+                    <span class="comments-date">  ·  2月28日</span>
+                </div>
+
+                <div class="fmt mb10"><p>你好，请问s_new[4]的最长回文半径是不是写错了，那里应该是2吧</p></div>
+
+                <form action="https://segmentfault.com/api/comment/1050000013430554/edit">
+                    <div class="form-group">
+                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">你好，请问s_new[4]的最长回文半径是不是写错了，那里应该是2吧</textarea>
+                    </div>
+                </form>
+
+                <p class="comment-ops not-reply">
+                    <span class="comments-zan ">
+                        <i class="fa fa-thumbs-up mr4" aria-hidden="true"></i>
+                        <span class="comments-zan-text">赞</span>
+                        <span class="comments-zan-value"></span>
+                    </span>
+                    
+                    <span class="ml15 comments-reply-btn">回复</span>
+
+                    <span class="pull-right editBtns hidden">
+                      <button class="btn btn-link btn-xs cancel" type="button">取消</button>
+                      <button class="btn btn-primary btn-xs edit ml10" type="button">保存</button>
+                    </span>
+                </p>
+
+                <div class="reply-list ">
+
+                    
+                        <div class="reply-item" data-id="1050000013798937">
+                            <span class="pull-left comment-ops " style="position:absolute;">
+                                <span class="mr20 comments-zan ">
+                                    <span class="comments-zan-value comment-showhide
+                                         islike0-10
+                                        ">
+                                        0
+                                    </span>
+                                    <i class="fa fa-thumbs-up comment-showhide ml5" aria-hidden="true"></i>
+                                </span>
+                            </span>
+
+                            <div class="reply-content-block">
+                                <div class="reply-content"><p>我也觉得是2</p></div>
+                                <form action="https://segmentfault.com/api/comment/1050000013798937/edit">
+                                    <div class="form-group">
+                                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">我也觉得是2</textarea>
+                                    </div>
+                                </form>
+                                <div class="comment-func inline-block">
+                                    
+
+                                    <span class="pull-right commentTools ml15">
+                                                                                                                                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-module="comment" data-id="1050000013798937" data-action="report" data-typetext="评论" data-placement="top" title="举报">
+                                            <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                        </a>
+                                    </span>
+
+                                    <span class="comment-meta inline-block">
+                                        <span> — </span>
+                                        <a target="_blank" href="https://segmentfault.com/u/followstep">
+                                            <strong>followStep</strong>
+                                        </a> 
+                                        <span class="comments-isAuthor hide">
+                                            
+                                        </span> 
+                                        <span class="text-muted-plus">  ·  3月17日</span>
+                                                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="reply-item" data-id="1050000014080751">
+                            <span class="pull-left comment-ops " style="position:absolute;">
+                                <span class="mr20 comments-zan ">
+                                    <span class="comments-zan-value comment-showhide
+                                         islike0-10
+                                        ">
+                                        0
+                                    </span>
+                                    <i class="fa fa-thumbs-up comment-showhide ml5" aria-hidden="true"></i>
+                                </span>
+                            </span>
+
+                            <div class="reply-content-block">
+                                <div class="reply-content"><p>对，是2，开始我还以为我理解错了</p></div>
+                                <form action="https://segmentfault.com/api/comment/1050000014080751/edit">
+                                    <div class="form-group">
+                                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">对，是2，开始我还以为我理解错了</textarea>
+                                    </div>
+                                </form>
+                                <div class="comment-func inline-block">
+                                    
+
+                                    <span class="pull-right commentTools ml15">
+                                                                                                                                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-module="comment" data-id="1050000014080751" data-action="report" data-typetext="评论" data-placement="top" title="举报">
+                                            <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                        </a>
+                                    </span>
+
+                                    <span class="comment-meta inline-block">
+                                        <span> — </span>
+                                        <a target="_blank" href="https://segmentfault.com/u/jzyshurak">
+                                            <strong>JZYshuraK</strong>
+                                        </a> 
+                                        <span class="comments-isAuthor hide">
+                                            
+                                        </span> 
+                                        <span class="text-muted-plus">  ·  3月30日</span>
+                                                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    <div class="reply-item reply-item--ops" data-obj="obj">
+                        <a class="reply-inner-btn" href="javascript:;">添加回复</a>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+                <div class="comments-item" data-id="1050000014529468">
+            <div class="pull-left">
+                <a href="https://segmentfault.com/u/deffrancis" target="_blank"><img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/user-64.png" alt=""></a>
+            </div>
+            <div class="comments-content">
+                <div class="comment-trigger">
+                    <div class="pull-right comment-option">
+                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-action="report" data-action-text="举报" data-module="comment" data-id="1050000014529468" data-typetext="评论" data-placement="top" title="举报"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
+                                            </div>
+                    <strong><a target="_blank" href="https://segmentfault.com/u/deffrancis">DefFrancis丶</a></strong>
+                    <span class="comments-isAuthor hide"></span>
+                    <span class="comments-date">  ·  4月22日</span>
+                </div>
+
+                <div class="fmt mb10"><p>写的挺好的！</p></div>
+
+                <form action="https://segmentfault.com/api/comment/1050000014529468/edit">
+                    <div class="form-group">
+                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">写的挺好的！</textarea>
+                    </div>
+                </form>
+
+                <p class="comment-ops not-reply">
+                    <span class="comments-zan ">
+                        <i class="fa fa-thumbs-up mr4" aria-hidden="true"></i>
+                        <span class="comments-zan-text">赞</span>
+                        <span class="comments-zan-value"></span>
+                    </span>
+                    
+                    <span class="ml15 comments-reply-btn">回复</span>
+
+                    <span class="pull-right editBtns hidden">
+                      <button class="btn btn-link btn-xs cancel" type="button">取消</button>
+                      <button class="btn btn-primary btn-xs edit ml10" type="button">保存</button>
+                    </span>
+                </p>
+
+                <div class="reply-list reply-list--empty">
+
+                    
+                    <div class="reply-item reply-item--ops" data-obj="obj">
+                        <a class="reply-inner-btn" href="javascript:;">添加回复</a>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+                <div class="comments-item" data-id="1050000015595898">
+            <div class="pull-left">
+                <a href="https://segmentfault.com/u/zhangyunfan" target="_blank"><img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/user-64.png" alt=""></a>
+            </div>
+            <div class="comments-content">
+                <div class="comment-trigger">
+                    <div class="pull-right comment-option">
+                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-action="report" data-action-text="举报" data-module="comment" data-id="1050000015595898" data-typetext="评论" data-placement="top" title="举报"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
+                                            </div>
+                    <strong><a target="_blank" href="https://segmentfault.com/u/zhangyunfan">张云帆</a></strong>
+                    <span class="comments-isAuthor hide"></span>
+                    <span class="comments-date">  ·  7月11日</span>
+                </div>
+
+                <div class="fmt mb10"><p>mx = id + p[id] - 1    吧</p></div>
+
+                <form action="https://segmentfault.com/api/comment/1050000015595898/edit">
+                    <div class="form-group">
+                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">mx = id + p[id] - 1    吧</textarea>
+                    </div>
+                </form>
+
+                <p class="comment-ops not-reply">
+                    <span class="comments-zan ">
+                        <i class="fa fa-thumbs-up mr4" aria-hidden="true"></i>
+                        <span class="comments-zan-text">赞</span>
+                        <span class="comments-zan-value"></span>
+                    </span>
+                    
+                    <span class="ml15 comments-reply-btn">回复</span>
+
+                    <span class="pull-right editBtns hidden">
+                      <button class="btn btn-link btn-xs cancel" type="button">取消</button>
+                      <button class="btn btn-primary btn-xs edit ml10" type="button">保存</button>
+                    </span>
+                </p>
+
+                <div class="reply-list reply-list--empty">
+
+                    
+                    <div class="reply-item reply-item--ops" data-obj="obj">
+                        <a class="reply-inner-btn" href="javascript:;">添加回复</a>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+                <div class="comments-item" data-id="1050000015786267">
+            <div class="pull-left">
+                <a href="https://segmentfault.com/u/shenmao" target="_blank"><img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/829318263-5b4065335a0da_big64" alt=""></a>
+            </div>
+            <div class="comments-content">
+                <div class="comment-trigger">
+                    <div class="pull-right comment-option">
+                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-action="report" data-action-text="举报" data-module="comment" data-id="1050000015786267" data-typetext="评论" data-placement="top" title="举报"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
+                                            </div>
+                    <strong><a target="_blank" href="https://segmentfault.com/u/shenmao">shenmao</a></strong>
+                    <span class="comments-isAuthor hide"></span>
+                    <span class="comments-date">  ·  7月27日</span>
+                </div>
+
+                <div class="fmt mb10"><p>怎么理论分析那部分就只讨论了 i &lt; mx 一种情况，i == mx 和 i &gt; mx 呢？</p></div>
+
+                <form action="https://segmentfault.com/api/comment/1050000015786267/edit">
+                    <div class="form-group">
+                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">怎么理论分析那部分就只讨论了 i &lt; mx 一种情况，i == mx 和 i &gt; mx 呢？</textarea>
+                    </div>
+                </form>
+
+                <p class="comment-ops not-reply">
+                    <span class="comments-zan ">
+                        <i class="fa fa-thumbs-up mr4" aria-hidden="true"></i>
+                        <span class="comments-zan-text">赞</span>
+                        <span class="comments-zan-value"></span>
+                    </span>
+                    
+                    <span class="ml15 comments-reply-btn">回复</span>
+
+                    <span class="pull-right editBtns hidden">
+                      <button class="btn btn-link btn-xs cancel" type="button">取消</button>
+                      <button class="btn btn-primary btn-xs edit ml10" type="button">保存</button>
+                    </span>
+                </p>
+
+                <div class="reply-list reply-list--empty">
+
+                    
+                    <div class="reply-item reply-item--ops" data-obj="obj">
+                        <a class="reply-inner-btn" href="javascript:;">添加回复</a>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+                <div class="comments-item" data-id="1050000016236570">
+            <div class="pull-left">
+                <a href="https://segmentfault.com/u/taomao" target="_blank"><img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/user-64.png" alt=""></a>
+            </div>
+            <div class="comments-content">
+                <div class="comment-trigger">
+                    <div class="pull-right comment-option">
+                                                <a href="https://segmentfault.com/a/1190000008484167#911" class="ml10" data-toggle="modal" data-target="#911" data-action="report" data-action-text="举报" data-module="comment" data-id="1050000016236570" data-typetext="评论" data-placement="top" title="举报"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
+                                            </div>
+                    <strong><a target="_blank" href="https://segmentfault.com/u/taomao">逃猫</a></strong>
+                    <span class="comments-isAuthor hide"></span>
+                    <span class="comments-date">  ·  9月1日</span>
+                </div>
+
+                <div class="fmt mb10"><p>这博客写的真tm漂亮，有一种看到美女的感觉</p></div>
+
+                <form action="https://segmentfault.com/api/comment/1050000016236570/edit">
+                    <div class="form-group">
+                        <textarea class="editTextarea mono form-control mb10 hidden" rows="1" name="text" style="height: 28px; overflow: hidden; word-wrap: break-word;">这博客写的真tm漂亮，有一种看到美女的感觉</textarea>
+                    </div>
+                </form>
+
+                <p class="comment-ops not-reply">
+                    <span class="comments-zan ">
+                        <i class="fa fa-thumbs-up mr4" aria-hidden="true"></i>
+                        <span class="comments-zan-text">赞</span>
+                        <span class="comments-zan-value"></span>
+                    </span>
+                    
+                    <span class="ml15 comments-reply-btn">回复</span>
+
+                    <span class="pull-right editBtns hidden">
+                      <button class="btn btn-link btn-xs cancel" type="button">取消</button>
+                      <button class="btn btn-primary btn-xs edit ml10" type="button">保存</button>
+                    </span>
+                </p>
+
+                <div class="reply-list reply-list--empty">
+
+                    
+                    <div class="reply-item reply-item--ops" data-obj="obj">
+                        <a class="reply-inner-btn" href="javascript:;">添加回复</a>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+            </div>
+    <div class="comments-loading hide">载入中...</div>
+        <div class="comments-more hide"><a href="javascript:;">显示更多评论</a></div>
+    
+
+                                    <div class="comments-box" id="goToReplyEditor">
+                <div class="pull-left">
+                    <img class="avatar-32 " src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/user-128.png" alt="">
+                </div>
+                <div class="comments-box-content">
+                    <form action="https://segmentfault.com/api/article/1190000008484167/comments/add">
+                        <div class="form-group mb0">
+                            <textarea name="text" rows="3" class="form-control" placeholder="文明社会，理性评论"></textarea>
+                            <div class="mt15 text-right">
+                                <button type="button" class="hide"></button>
+                                <button class=" btn btn-primary" type="button">发布评论</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                                                        </div>
+    </div>
+
+
+                                    
+                
+                
+
+            </div><!-- /.main -->
+
+
+            <div class="col-md-3 side hidden-sm hidden-xs mt30" style="height: 8426px;">
+                                                
+                <div class="mb25 hidden-md hidden-sm hidden-xs">
+    <img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20181214.png" alt="Planets" usemap="#gridsMap" width="255" height="136">
+    <map name="gridsMap" id="gridsMap"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000016942470)" coords="221,0,255,34" href="https://www.3tee.cn/index.html?source=segmentfault" stitle="多方实时音视频互动，兼容WebRTC，浙江大华都在用"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017188265)" coords="204,0,221,17" href="https://12306bycloud.com/" stitle="12306bycloud - 程序员个人写的抢票软件，p2p架构，极速出票"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017208991)" coords="238,119,255,136" href="https://58hualong.com/?from=sg" stitle="PHP全栈，区块链以太坊开发视频教程"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017209644)" coords="85,34,153,51" href="https://www.layui.com/admin/std/dist/views/" stitle="通用后台管理模板 - 基于 layui，美观易用"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017209879)" coords="34,34,51,51" href="https://www.layui.com/" stitle="layui 是一款传统经典模块化的前端 UI 框架，主要面向服务端开发者。"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017232673)" coords="136,119,153,136" href="https://www.fundebug.com/?utm_source=sf_ad" stitle="Debug就用Fundebug！"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017266704)" coords="17,102,34,119" href="https://www.frontendjs.com/" stitle="前站，最全前端导航，收录前端网站门户、活跃社区、前端文档，快速在不同社区搜索问题"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017296635)" coords="102,68,136,102" href="https://www.publiccms.com/?utm_source=segmentfault" stitle="PublicCMS 最专业的开源CMS-北京北海公园官网正在使用"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017305254)" coords="0,0,17,17" href="https://mp.weixin.qq.com/s?__biz=MzI2OTA2MjExMQ==&amp;mid=2660787070&amp;idx=1&amp;sn=85311dada9ec71fdef3de2b410c9dbeb&amp;chksm=f18ad9cec6fd50d" stitle="我们正在寻找技术方面的中高端人才"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017316701)" coords="85,0,136,17" href="https://www.fundebug.com/?utm_source=sf_1" stitle="Debug就用Fundebug"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017321033)" coords="17,51,68,85" href="https://www.tracup.com/" stitle="Bug管理，用Tracup"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017324760)" coords="153,102,255,119" href="https://uniapp.dcloud.io/?hmsr=sf&amp;hmpl=&amp;hmcu=&amp;hmkw=&amp;hmci=" stitle="开发一次，同时生成 App、小程序、H5"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017331892)" coords="0,119,51,136" href="https://www.9xkd.com/special/3.html?from=sf" stitle="陪你从基础到精通学一门可用20年的编程语言：Python"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017334962)" coords="85,51,153,68" href="https://www.nowcoder.com/activity/oj?from=SFbiancheng" stitle="十万编程题库，就来牛客网"><area shape="rect" target="_blank" onmouseover="SFGridAd.d(this)" onmouseout="SFGridAd.e(this)" onclick="SFGridAd.c(1750000017343968)" coords="204,51,255,68" href="https://www.accesshub.cn/" stitle="SD-WAN软件解决方案，帮助用户在混合网络环境组网，满足网络联通性需求"></map>
+    <div style="text-align: center;"><a style="text-align:center; color:#9E9E9E; font-size:12px" href="https://segmentfault.com/sponsor">想在上方展示你的广告？</a></div>
+            <script async="" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/20181214.js.下载"></script>
+    </div>
+
+                                <style>
+                    .job-recommend-area a:not(:last-of-type) {margin-bottom:10px; display: block}
+                    .job-recommend-area a:hover {text-decoration: none;}
+                </style>
+                <div class="hidden-md">
+                    <div class="job-recommend">
+                      <h3 class="job-title">推广链接</h3>
+                      <div class="job-recommend-area">
+                                                <script type="text/javascript">
+                            OA_show(7);
+                            OA_show(9);
+                            OA_show(10);
+                            OA_show(15);
+                            OA_show(16);
+                        </script><a href="https://sponsor.segmentfault.com/ck.php?oaparams=2__bannerid=57__zoneid=7__cb=6c7440fa39__oadest=https%3A%2F%2Fsegmentfault.com%2Fls%2F1650000011387052" target="_blank"><strong> Java 微服务实践课</strong><br>
+<small style="color: #999">上千人学习过的微服务实栈课</small></a><div id="beacon_6c7440fa39" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg(2).php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+<a href="https://sponsor.segmentfault.com/ck.php?oaparams=2__bannerid=56__zoneid=9__cb=64b68ecd29__oadest=https%3A%2F%2Fsegmentfault.com%2Fls%2F1650000011318558" target="_blank"><strong>大神的PHP 进阶之路</strong><br>
+<small style="color: #999">亿级 PV 项目的架构梳理，性能提升实战</small></a><div id="beacon_64b68ecd29" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg(3).php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+<div id="beacon_efa77f7929" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg(4).php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+<div id="beacon_b16b904af8" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg(5).php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+<div id="beacon_03135a9330" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg(6).php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+
+                      </div>
+                    </div>
+                    <style>
+                    .job-recommend {margin-bottom: 30px;}
+                    .job-title {
+                        font-size: 14px;
+                        color: #017E66;
+                        font-weight: 500;
+                        background: #BFE6D7;
+                        margin: 0;
+                        padding-top: 6px;
+                        padding-bottom: 6px;
+                        text-align: center;
+                    }
+                    .job-recommend-area {
+                      padding: 13px;
+                      border: 3px solid #EBF7F3;
+                      border-top: none;
+                    }
+                    </style>
+                    
+                                    </div>
+
+                                
+                <div class="hidden-md ad-should-be-fixed stuckMenu" style="display: block; position: relative; top: 0px;">
+                    <div class="mb25 block">
+                        <script type="text/javascript">
+                            OA_show(1);
+                        </script><script async="" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/f(2).txt"></script>
+<!-- 侧栏矩形 -->
+<ins class="adsbygoogle" style="display:inline-block;width:255px;height:213px" data-ad-client="ca-pub-6330872677300335" data-ad-slot="9674628595" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:213px;margin:0;padding:0;position:relative;visibility:visible;width:255px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:213px;margin:0;padding:0;position:relative;visibility:visible;width:255px;background-color:transparent;"><iframe width="255" height="213" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0px;width:255px;height:213px;" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/saved_resource(1).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script><div id="beacon_e71f6e1418" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/lg(7).php" width="0" height="0" alt="" style="width: 0px; height: 0px;"></div>
+
+                    </div>
+                </div>
+                <div class="post-nav hidden-xs side-outline hidden-sm" style="display: block; position: sticky; top: 238px; margin-top: 0px;">
+                    <div class="panel panel-default widget-outline">
+                        <div class="panel-heading">目录</div>
+                        <div class="panel-body">
+                            <div class="nav-body" style="overflow: scroll; top: 0px; height: 454px;">
+                                <div class="highlight-title" style="display: none; top: 0px; height: 27px;"></div>
+                                <ul class="articleIndex"><li class=""><a href="https://segmentfault.com/a/1190000008484167#articleHeader0">一：背景</a></li><li class=""><a href="https://segmentfault.com/a/1190000008484167#articleHeader1">二：算法过程分析</a></li><li class=""><a href="https://segmentfault.com/a/1190000008484167#articleHeader2">三：代码</a></li><li class=""><a href="https://segmentfault.com/a/1190000008484167#articleHeader3">四：算法复杂度分析</a></li></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div><!-- /.side -->
+        </div>
+    </div>
+</div>
+
+<div id="shareToWeiboModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">分享</h4>
+            </div>
+            <div class="modal-body">
+                <p class="sfModal-content">
+                    分享到微博？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default dont-likeweibo" data-dismiss="modal">取消</button>
+                <a href="https://segmentfault.com/a/1190000008484167" id="shareLink" class="btn btn-primary done-btn" target="_blank" onclick="$(&#39;#shareToWeiboModal&#39;).modal(&#39;hide&#39;)">分享</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal widget-911" id="911" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title"><span data-model="action"></span><span data-model="type"></span></h4>
+      </div>
+      <div class="modal-body">
+        <form id="reportForm">
+          <!-- 后台返回信息 -->
+          <p class="alert alert-warning" data-model="returnMsg"></p>
+          <div data-role="base">
+            <p>
+              <strong class="required">我要<span data-model="action"></span>该<span data-model="type"></span>，理由是：</strong>
+            </p>
+            <ul class="list-unstyled" data-model="list"></ul>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default pull-left" type="button" data-role="back" style="display:none">返回重选</button>
+                <button class="btn btn-default" data-dismiss="modal" type="button">取消</button>
+        <button class="btn btn-primary" data-role="submit" type="button">提交</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal widget-seo" id="seo" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title"><span data-model="action"></span><span data-model="type"></span></h4>
+            </div>
+            <div class="modal-body">
+                <form id="seoForm">
+                    <!-- 后台返回信息 -->
+                    <p class="alert alert-warning" data-model="returnMsg" style="display: none;"></p>
+                    <div data-role="base">
+                        <div class="form-group">
+                            <label>SEO标题：</label><textarea style="min-height: 35px; width: 100%; max-height: 132px; overflow: hidden; overflow-wrap: break-word; height: 32px;" name="title" class="form-control" rows="1" placeholder="请输入SEO标题"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>SEO描述：</label><textarea style="min-height: 35px; max-height: 132px; overflow: hidden; overflow-wrap: break-word; height: 32px;" name="desc" class="form-control" rows="1" placeholder="请输入SEO描述"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>SEO keywords：</label><textarea style="min-height: 35px; max-height: 132px; overflow: hidden; overflow-wrap: break-word; height: 32px;" name="keywords" class="form-control" rows="1" placeholder="请输入SEO keywords"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">取消</button>
+                <button class="btn btn-primary" data-role="submit" type="button">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    <div id="loginBanner" class="hidden-sm hidden-xs loginBanner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-7">
+                <h1 class="title">在 SegmentFault，学习技能、解决问题</h1>
+                <p class="desc">每个月，我们帮助 1000 万的开发者解决各种各样的技术问题。并助力他们在技术能力、职业生涯、影响力上获得提升。</p>
+            </div>
+            <div class="col-lg-3 col-lg-offset-3 col-md-4 col-md-offset-1">
+                <form class="register-form clearfix" action="https://segmentfault.com/api/user/phone/register">
+
+                    
+                    <a href="https://segmentfault.com/user/register" class="SFLogin btn btn-lg btn-primary mr15">免费注册</a>
+                    <a href="https://segmentfault.com/user/login" class="SFRegister btn btn-lg btn-primary">立即登录</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+<footer id="footer">
+    <div class="container">
+        <div class="row hidden-xs">
+            <dl class="col-sm-2 site-link">
+                <dt>产品</dt>
+                
+                <dd><a href="https://segmentfault.com/questions/hottest?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=product&amp;utm_content=footer-links-hottest-questions&amp;utm_term=%E7%83%AD%E9%97%A8%E9%97%AE%E7%AD%94">热门问答</a></dd>
+                <dd><a href="https://segmentfault.com/blogs/hottest?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=product&amp;utm_content=footer-links-hottest-questions&amp;utm_term=%E7%83%AD%E9%97%A8%E4%B8%93%E6%A0%8F">热门专栏</a></dd>
+                <dd><a href="https://segmentfault.com/lives?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=product&amp;utm_content=footer-links-hottest-questions&amp;utm_term=%E7%83%AD%E9%97%A8%E8%AE%B2%E5%A0%82">热门讲堂</a></dd>
+                <dd><a href="https://segmentfault.com/events?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=product&amp;utm_content=footer-links-hottest-questions&amp;utm_term=%E6%9C%80%E6%96%B0%E6%B4%BB%E5%8A%A8">最新活动</a></dd>
+                <dd><a href="https://segmentfault.com/groups?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=product&amp;utm_content=footer-links-hottest-questions&amp;utm_term=%E5%9C%88%E5%AD%90">圈子</a></dd>
+                <dd><a href="https://segmentfault.com/jobs?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=product&amp;utm_content=footer-links-hottest-questions&amp;utm_term=%E6%89%BE%E5%B7%A5%E4%BD%9C">找工作</a></dd>
+                <dd><a href="https://segmentfault.com/app?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=product&amp;utm_content=footer-links-hottest-questions&amp;utm_term=app">移动客户端</a></dd>
+                
+            </dl>
+            
+            <dl class="col-sm-2 site-link">
+                <dt>资源</dt>
+                <dd><a href="https://segmentfault.com/weekly?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=resource&amp;utm_content=footer-links-weekly&amp;utm_term=%E6%AF%8F%E5%91%A8%E7%B2%BE%E9%80%89">每周精选</a></dd>
+                <dd><a href="https://segmentfault.com/users?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=resource&amp;utm_content=footer-links-users&amp;utm_term=%E7%94%A8%E6%88%B7%E6%8E%92%E8%A1%8C%E6%A6%9C">用户排行榜</a></dd>
+                <dd><a href="https://segmentfault.com/badges?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=resource&amp;utm_content=footer-links-badges&amp;utm_term=%E5%BE%BD%E7%AB%A0">徽章</a></dd>
+                <dd><a href="https://segmentfault.com/faq?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=resource&amp;utm_content=footer-links-faq&amp;utm_term=%E5%B8%AE%E5%8A%A9%E4%B8%AD%E5%BF%83">帮助中心</a></dd>
+                <dd><a href="https://segmentfault.com/repu?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=resource&amp;utm_content=footer-links-repu&amp;utm_term=%E5%A3%B0%E6%9C%9B%E4%B8%8E%E6%9D%83%E9%99%90">声望与权限</a></dd>
+                <dd><a href="https://segmentfault.com/community?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=resource&amp;utm_content=footer-links-community&amp;utm_term=%E7%A4%BE%E5%8C%BA%E6%9C%8D%E5%8A%A1%E4%B8%AD%E5%BF%83">社区服务中心</a></dd>
+                <dd><a href="https://docs.segmentfault.com/?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=resource&amp;utm_content=footer-links-docs&amp;utm_term=%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C">开发手册</a></dd>
+
+   
+            </dl>
+
+            <dl class="col-sm-2 site-link">
+                <dt>商务</dt>
+                <dd><a href="https://business.segmentfault.com/services?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=business&amp;utm_content=footer-links-services-rencai&amp;utm_term=%E4%BA%BA%E6%89%8D%E6%9C%8D%E5%8A%A1" target="_blank">人才服务</a></dd>
+                <dd><a href="https://business.segmentfault.com/services?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=business&amp;utm_content=footer-links-services-qiyeneixun&amp;utm_term=%E4%BC%81%E4%B8%9A%E6%9C%8D%E5%8A%A1" target="_blank">企业培训</a></dd>
+                <dd><a href="https://business.segmentfault.com/services?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=business&amp;utm_content=footer-links-services-huodongcehua&amp;utm_term=%E6%B4%BB%E5%8A%A8%E7%AD%96%E5%88%92" target="_blank">活动策划</a></dd>
+                <dd><a href="https://business.segmentfault.com/ads?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=business&amp;utm_content=footer-links-ads&amp;utm_term=%E5%B9%BF%E5%91%8A%E6%8A%95%E6%94%BE" target="_blank">广告投放</a></dd>
+                <dd><a href="https://business.segmentfault.com/bc?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=business&amp;utm_content=footer-links-bc&amp;utm_term=%E5%8C%BA%E5%9D%97%E9%93%BE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88" target="_blank">区块链解决方案</a></dd>
+                <dd><a href="https://business.segmentfault.com/contact?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=business&amp;utm_content=footer-links-contact&amp;utm_term=%E5%90%88%E4%BD%9C%E8%81%94%E7%B3%BB" target="_blank">合作联系</a></dd>
+            </dl>
+            
+            <dl class="col-sm-2 site-link">
+                <dt>关于</dt>
+                <dd><a href="https://about.segmentfault.com/?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=about&amp;utm_content=about-index&amp;utm_term=%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC">关于我们</a></dd>
+                <dd><a href="https://about.segmentfault.com/careers.html?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=about&amp;utm_content=about-careers&amp;utm_term=%E5%8A%A0%E5%85%A5%E6%88%91%E4%BB%AC">加入我们</a></dd>
+                <dd><a href="https://about.segmentfault.com/contact.html?utm_source=sf-footer&amp;utm_medium=footer-nav&amp;utm_campaign=about&amp;utm_content=about-contact&amp;utm_term=%E8%81%94%E7%B3%BB%E6%88%91%E4%BB%AC">联系我们</a></dd>
+            </dl>
+
+            <dl class="col-sm-2 site-link">
+                <dt>关注</dt>
+                                <dd><a href="https://segmentfault.com/blog/segmentfault" target="_blank">产品技术日志</a></dd>
+                                <dd><a href="https://segmentfault.com/blog/community_admin" target="_blank">社区运营日志</a></dd>
+                                <dd><a href="https://segmentfault.com/blog/segmentfault_news" target="_blank">市场运营日志</a></dd>
+                                <dd><a href="https://segmentfault.com/blog/segmentfault_team" target="_blank">团队日志</a></dd>
+                                <dd><a href="https://segmentfault.com/blog/interview" target="_blank">社区访谈</a></dd>
+                                <dd>
+                    <ul class="sn-inline">
+                        <li>
+                            <a class="entypo-wechart icon-sn-weixin weixin-popover-qrcode" data-toggle="popover" data-placement="top" data-content="" data-original-title="" title="">微信</a>
+                        </li>
+                        <li>
+                            <a href="http://weibo.com/segmentfault" target="_blank" class="entypo-weibo icon-sn-weibo">新浪微博</a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/SegmentFault" target="_blank" class="entypo-facebook icon-sn-github">Github</a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/segment_fault" target="_blank" class="entypo-twitter icon-sn-twitter">Twitter</a>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl class="col-sm-2 site-link" id="license">
+                <dt>条款</dt>
+                <dd><a href="https://segmentfault.com/tos">服务条款</a></dd>
+                <dd><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">内容许可</a></dd>
+                <dd>
+                    <a href="https://segmentfault.com/app" class="clearfix mt10 block"><img src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/appQrcode.png" class="app-qrcode"></a>
+                    <div class="app-download-desc">
+                        <p>扫一扫下载 App</p>
+                    </div>
+                    
+                </dd>
+            </dl>
+        </div>
+        <div class="copyright">
+            Copyright © 2011-2018 SegmentFault. 当前呈现版本 17.06.16<br>
+            <a href="http://www.miibeian.gov.cn/" rel="nofollow">浙ICP备 15005796号-2</a> &nbsp;
+            <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602002000" rel="nofollow">浙公网安备 33010602002000号</a>
+            <span class="ml5">杭州堆栈科技有限公司版权所有</span>
+            <p class="mt30">CDN 存储服务由 <a target="_blank" href="https://www.upyun.com/?utm_source=segmentfault&amp;utm_medium=link&amp;utm_campaign=upyun&amp;md=segmentfault">又拍云</a> 赞助提供 </p>
+        </div>
+        <p class="text-center">
+            <a class="js__view--selector hidden-sm hidden-md hidden-lg" data-action="mobile" href="javascript:;">移动版</a>
+            <a class="js__view--selector hidden-sm hidden-md hidden-lg" data-action="desktop" href="javascript:;">桌面版</a>
+        </p>
+    </div>
+</footer>
+
+<div id="fixedTools" class="hidden-xs hidden-sm">
+    <a id="backtop" class="border-bottom hidden" href="https://segmentfault.com/a/1190000008484167#">回顶部</a>
+</div>
+
+    <script id="loginModal" type="text/template">
+    <div class="row bg-white login-modal">
+        <div class="col-md-12 login-wrap">
+            <form action="/api/user/login" method="POST" role="form" class="mt15">
+                <div class="form-group hidden">
+                                        <input type="text" class="form-control" name="remember" value="1"
+                           autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="username" class="control-label">手机号 或 Email</label>
+                    <input type="text" class="form-control" name="username" tabindex="1" required placeholder="11 位手机号 或 Email"
+                           autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">密码</label><span class="pull-right"><a
+                                href="/user/forgot" tabindex="4">忘记密码</a></span>
+                    <input type="password" class="form-control" name="password" tabindex="2" required placeholder="请输入密码">
+                </div>
+                <div class="form-group">
+                    <a
+                            
+                                                    href="/user/phoneLogin"
+                            class="phoneLogin"
+                                            >手机验证码登录</a>
+                </div>
+                <div class="form-group clearfix">
+                    <button type="submit" class="btn-block btn btn-primary pull-right pl20 pr20" tabindex="3"
+                            onclick='ga("send", "event", "email login button", "clicked", "login modal");'>登录
+                    </button>
+                </div>
+            </form>
+            <div class="text-muted text-center more-login-area">
+    <span class="more-login-words">更多登录方式</span>
+</div>
+<div class="widget-login mb15 text-center">
+    <a href="/user/oauth/google" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "google"});'><span
+                class="icon-sn-google"></span></a>
+    <a href="/user/oauth/github" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "github"});");'><span
+                class="icon-sn-github"></span></a>
+    <a href="/user/oauth/weibo" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "weibo"});'><span
+                class="icon-sn-weibo"></span></a>
+    <a href="/user/oauth/qq" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "qq"});'><span
+                class="icon-sn-qq"></span></a>
+    <a href="/user/oauth/weixin" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "qq"});'><span
+                class="icon-sn-weixin"></span></a>
+    <a href="/user/oauth/linkedin" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "linkedin"});'><span
+                class="icon-sn-linkedin"></span></a>
+    <span id="loginShowMore" style="cursor: pointer" class="mb5"><span class="icon-sn-dotted"></span></span>
+    <a href="/user/oauth/twitter" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "twitter"});'><span
+                class="icon-sn-twitter"></span></a>
+    <a href="/user/oauth/facebook" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "facebook"});'><span
+                class="icon-sn-facebook"></span></a>
+    <a href="/user/oauth/douban" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "douban"});'><span
+                class="icon-sn-douban"></span></a>
+</div>
+<div class="form-group clearfix">
+    <a class="btn-block btn btn-default pull-right pl20 pr20 
+                        SFLogin
+             "
+
+            
+        onclick='ga("send", "event", "email login button", "clicked", "login modal");'>
+                    注册新账号
+            </a>
+</div>
+<p class="text-muted text-center mb15">登录即表示你同意网站的<a href="/tos" target="_blank">《服务条款》</a></p>        </div>
+    </div>
+</script>
+    <script id="registerModal" type="text/template">
+    <div class="row bg-white login-modal">
+        <div class="col-md-12 login-wrap">
+            
+            <form action="/api/user/register" method="POST" role="form" class="mt15">
+                <div class="form-group">
+                    <label for="name" class="control-label">你的名字</label>
+                    <input type="text" class="form-control" name="name" required placeholder="真实姓名或常用昵称">
+                </div>
+                
+                <div class="form-group">
+                    <label for="mail" class="control-label">手机号 或 Email</label>
+                    <input type="text" class="form-control" id="login-name" name="mail" required placeholder="11 位手机号 或 Email">
+                </div>
+                
+                <input type="text" class="hidden" name="register_type" value="mail">
+
+                <div class="form-group">
+                    <div class="phone-register-only hidden">
+                        <div class="captchaInput mb10">
+                            <input type="text" class="form-control" name="cap" placeholder="右侧的验证码" style="width:50%; display: inline; margin-right: 15px;">
+                            <span class="mt10">
+                                <a id="loginReloadCaptcha" href="javascript:void(0)">
+                                <img src="/user/captcha?w=135&h=34" class="cap" width="135" height="34"/></a>
+                            </span>
+                        </div>
+                        <div class="input-group">
+                            <input name="code" type="text" class="form-control js-user-login__phone-code-value" placeholder="短信验证码">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default js-user-login__phone-vaild-btn" style="width:96px;" type="button">
+                                获取验证码</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="control-label">密码</label>
+                    <input type="password" class="form-control" name="password" required placeholder="不少于 6 位的密码">
+                </div>
+                <div class="form-group clearfix">
+                    <button type="submit" class="btn-block btn btn-primary pl20 pr20 pull-right"
+                            onclick='ga("send", "event", "email register button", "clicked", "login modal");'>注册
+                    </button>
+                </div>
+                                <div class="text-muted text-center more-login-area">
+    <span class="more-login-words">更多登录方式</span>
+</div>
+<div class="widget-login mb15 text-center">
+    <a href="/user/oauth/google" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "google"});'><span
+                class="icon-sn-google"></span></a>
+    <a href="/user/oauth/github" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "github"});");'><span
+                class="icon-sn-github"></span></a>
+    <a href="/user/oauth/weibo" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "weibo"});'><span
+                class="icon-sn-weibo"></span></a>
+    <a href="/user/oauth/qq" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "qq"});'><span
+                class="icon-sn-qq"></span></a>
+    <a href="/user/oauth/weixin" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "qq"});'><span
+                class="icon-sn-weixin"></span></a>
+    <a href="/user/oauth/linkedin" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "linkedin"});'><span
+                class="icon-sn-linkedin"></span></a>
+    <span id="loginShowMore" style="cursor: pointer" class="mb5"><span class="icon-sn-dotted"></span></span>
+    <a href="/user/oauth/twitter" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "twitter"});'><span
+                class="icon-sn-twitter"></span></a>
+    <a href="/user/oauth/facebook" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "facebook"});'><span
+                class="icon-sn-facebook"></span></a>
+    <a href="/user/oauth/douban" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "douban"});'><span
+                class="icon-sn-douban"></span></a>
+</div>
+<div class="form-group clearfix">
+    <a class="btn-block btn btn-default pull-right pl20 pr20 
+                        SFRegister
+             "
+
+            
+        onclick='ga("send", "event", "email login button", "clicked", "login modal");'>
+                    已有账号登录
+            </a>
+</div>
+<p class="text-muted text-center mb15">登录即表示你同意网站的<a href="/tos" target="_blank">《服务条款》</a></p>            </form>
+        </div>
+    </div>
+</script>
+    <script id="phoneLoginModal" type="text/template">
+
+    <div class="row bg-white login-modal phonelogin-modal">
+        <div class="col-md-12 login-wrap">
+            <form action="/api/user/phonelogin" method="POST" role="form" class="mt15">
+                <div class="form-group">
+                    <label for="phone" class="control-label required">手机号</label>
+                    <input type="text" class="form-control phonelogin--phone" name="phone" tabindex="1" required placeholder="11 位手机号"
+                           autocomplete="off">
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="authCode" class="control-label required">验证码</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control bindphone--code" name="authCode" placeholder="短信验证码">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default user-bind__phone-vaild-btn" type="button">获取验证码</button>
+                        </span>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+
+                <div class="form-group">
+                    <a 
+                                                            href="/user/login"
+                                class="SFRegister"
+                                                >密码登录（手机号或 Email）</a>
+                </div>
+                <div class="form-group clearfix">
+                    <button type="submit" class="btn-block btn btn-primary pull-right pl20 pr20" tabindex="3"
+                            onclick='ga("send", "event", "email login button", "clicked", "login modal");'>登录
+                    </button>
+                </div>
+            </form>
+            <div class="text-muted text-center more-login-area">
+    <span class="more-login-words">更多登录方式</span>
+</div>
+<div class="widget-login mb15 text-center">
+    <a href="/user/oauth/google" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "google"});'><span
+                class="icon-sn-google"></span></a>
+    <a href="/user/oauth/github" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "github"});");'><span
+                class="icon-sn-github"></span></a>
+    <a href="/user/oauth/weibo" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "weibo"});'><span
+                class="icon-sn-weibo"></span></a>
+    <a href="/user/oauth/qq" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "qq"});'><span
+                class="icon-sn-qq"></span></a>
+    <a href="/user/oauth/weixin" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "qq"});'><span
+                class="icon-sn-weixin"></span></a>
+    <a href="/user/oauth/linkedin" class=""
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "linkedin"});'><span
+                class="icon-sn-linkedin"></span></a>
+    <span id="loginShowMore" style="cursor: pointer" class="mb5"><span class="icon-sn-dotted"></span></span>
+    <a href="/user/oauth/twitter" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "twitter"});'><span
+                class="icon-sn-twitter"></span></a>
+    <a href="/user/oauth/facebook" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "facebook"});'><span
+                class="icon-sn-facebook"></span></a>
+    <a href="/user/oauth/douban" class=" hidden"
+       onclick='ga("send", "event", "3rd login button", "clicked", "login modal", {media: "douban"});'><span
+                class="icon-sn-douban"></span></a>
+</div>
+<div class="form-group clearfix">
+    <a class="btn-block btn btn-default pull-right pl20 pr20 
+                        SFLogin
+             "
+
+            
+        onclick='ga("send", "event", "email login button", "clicked", "login modal");'>
+                    注册新账号
+            </a>
+</div>
+<p class="text-muted text-center mb15">登录即表示你同意网站的<a href="/tos" target="_blank">《服务条款》</a></p>        </div>
+    </div>
+</script>
+<script id="bindPhoneModal" type="text/template">
+    <div class="bg-white bindphone-model">
+        <div class="alert alert-warning" role="alert">
+            为了保证账号安全，请先绑定手机
+        </div>
+        <div>
+            <form class="form-horizontal form__bindphone-apply" style="background-color:#fff;padding:0;">
+                <div class="form-group ">
+                    <label for="phoneNumber" class="col-sm-3 control-label required" >手机号码</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control bindphone--phone" id="phoneNumber" name="phone" placeholder="仅只支持大陆手机号">
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="form-group">
+                    <label for="authCode" class="col-sm-3 control-label required">验证码</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control bindphone--code" name="code" placeholder="短信验证码">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default user-bind__phone-vaild-btn" type="button">获取验证码</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</script>
+
+
+<script>
+    window.serverTime = 1544778442000;
+</script>
+
+<script>
+    (function (w) {
+        w.SF = {
+            staticUrl: "https://cdn.segmentfault.com/v-5c0e40c9"
+        };
+        w.SF.token = (function () {
+    var _dS56 = 'Yzx'//'Yzx'
++//'M3I'
+'e'+//'C'
+'C'+'3'//'ja'
++//'7w'
+'6'+'91c'//'4pG'
++//'6'
+'b30'+//'E'
+'93e'+//'mRa'
+'35'+'5'//'2b'
++//'s'
+'acd'+//'lW'
+'e6'+'f3c'//'J'
++'7'//'8t'
++'925'//'mHv'
++'7'//'w0'
++//'I1'
+'aa7'+//'q'
+'3', _xxpOfIV = [[0,3],[1,2]];
+
+    for (var i = 0; i < _xxpOfIV.length; i ++) {
+        _dS56 = _dS56.substring(0, _xxpOfIV[i][0]) + _dS56.substring(_xxpOfIV[i][1]);
+    }
+
+    return _dS56;
+})();;
+    })(window);
+
+                var lock = {
+        type: "",
+        text: '',
+        table: {"ban_post":[1,"\u4f60\u5df2\u7ecf\u88ab\u7981\u8a00, \u65e0\u6cd5\u8fdb\u884c\u6b64\u64cd\u4f5c, \u5982\u6709\u7591\u4e49\u8bf7\u63d0\u4ea4\u7533\u8bc9, \u6216\u8005\u53d1\u90ae\u4ef6\u5230pr@segmentfault.com"]}
+    };
+
+        var ddosMode = false;
+    
+        (function (currentUrl) {
+        if (typeof URL != 'undefined') {
+            var baseUrl = new URL('https://segmentfault.com');
+
+            if (baseUrl.protocol != currentUrl.protocol
+                || baseUrl.host != currentUrl.host) {
+                window.location.href = baseUrl.protocol + '//' + baseUrl.host
+                    + currentUrl.pathname + currentUrl.search + currentUrl.hash;
+            }
+        }
+    })(window.location);
+    </script>
+
+             <script crossorigin="" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/assets.js.下载"></script>
+                 
+        <script crossorigin="" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/post.min.js.下载"></script>
+            
+
+<script>
+if (!!navigator.userAgent.match(/MicroMessenger/i)) {
+    require.config({
+        paths: { weixin_jsapi: '//res.wx.qq.com/open/js/jweixin-1.2.0' }
+    });
+
+    require(['weixin_jsapi'], function (wx) {
+        var share = {"title":"Manacher\u7b97\u6cd5","desc":"\u539f\u6587\u94fe\u63a5\uff1a[\u94fe\u63a5] \u4e00\uff1a\u80cc\u666f \u7ed9\u5b9a\u4e00\u4e2a\u5b57\u7b26\u4e32\uff0c\u6c42\u51fa\u5176\u6700\u957f\u56de\u6587\u5b50\u4e32\u3002\u4f8b\u5982\uff1a s=\"abcd\"\uff0c\u6700\u957f\u56de\u6587\u957f\u5ea6\u4e3a 1\uff1b s=\"ababa\"\uff0c\u6700\u957f\u56de\u6587\u957f\u5ea6\u4e3a 5\uff1b s=\"abccb\"\uff0c\u6700\u957f\u56de\u6587\u957f\u5ea6\u4e3a 4\uff0c\u5373bccb\u3002 \u4ee5\u4e0a\u95ee\u9898\u7684\u4f20\u7edf\u601d\u8def\u5927\u6982\u662f\uff0c\u904d\u5386...","link":"https:\/\/segmentfault.com\/a\/1190000008484167","imgUrl":"https:\/\/subetter.com\/images\/figures\/20180331_01.png"};
+        share.title += ' - SegmentFault 思否';
+
+        $.getJSON('/api/util/weixin/jsapi', function (o) {
+            methods = o.data.jsApiList.slice();
+
+            wx.config(o.data);
+            wx.error(console.error);
+            wx.ready(function () {
+                methods.forEach(function (method) {
+                    wx[method](share);
+                });
+            });
+        });
+    });
+}
+</script>
+
+<script>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-918487-8']);
+    _gaq.push(['_trackPageview']);
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                
+        
+
+            
+
+    ga('create', 'UA-918487-8', 'auto', {
+        'userID'
+    : 0,
+        'createdTime'
+    : 0,
+        'now'
+    : 1544778442,
+        'allowLinker'
+    : true });
+    ga('require', 'linker');
+    ga('linker:autoLink', ['docs.segmentfault.com'] );
+    ga('set', 'dimension1', 'guest');
+    ga('send', 'pageview');
+
+</script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?e23800c454aa573c0ccb16b52665ac26";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+<iframe id="google_osd_static_frame_7703396139597" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/saved_resource(2).html"></iframe><iframe id="p_analyse_iframe" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/saved_resource(3).html" style="display: none;"></iframe><div id="atwho-container"><div id="atwho-ground-bdd135901544778445364"><div class="atwho-view" id="at-view-64"><ul class="atwho-view-ul"></ul></div></div></div><div style="position: absolute; width: 0px; height: 0px; overflow: hidden; padding: 0px; border: 0px; margin: 0px;"><div id="MathJax_Font_Test" style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: normal; font-family: MathJax_Main, sans-serif;"></div></div></body><iframe id="google_shimpl" style="display: none;" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/saved_resource(4).html"></iframe><iframe id="google_esf" name="google_esf" src="./Manacher算法 - 经典算法与数据结构 - SegmentFault 思否_files/zrt_lookup.html" data-ad-client="ca-pub-6330872677300335" style="display: none;"></iframe></html>
