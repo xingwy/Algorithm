@@ -437,59 +437,22 @@ public:
 };
 ```
 
-#### **10. Regular Expression Matching**
+#### **[10.正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)**
 
-题述：拼接链表 规则如下
+题述：给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
+
+'.' 匹配任意单个字符
+'*' 匹配零个或多个前面的那一个元素
+所谓匹配，是要涵盖 整个 字符串 s的，而不是部分字符串。
 
 ```c++
-Input:
-[
-  1->4->5,
-  1->3->4,
-  2->6
-]
-Output: 1->1->2->3->4->4->5->6
+输入：s = "aa" p = "a"
+输出：false
+解释："a" 无法匹配 "aa" 整个字符串。
 ```
 
 ```c++
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-class Solution {
-public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-	    ListNode *head = NULL, *p;
-	    p = new ListNode(0);
-	    head = p;
-	    while (lists.size()) {
-	    	int min = 0x7fffffff;
-	    	int pos_i;
-	    	for (int i = 0; i < lists.size();) {		
-	    		if (lists[i] != NULL) {
-	    			if (min > lists[i]->val) {
-	    				min = lists[i]->val;
-	    				pos_i = i;
-	    			}
-	    			i++;
-	    		}
-    			else {
-	    			lists.erase(lists.begin() + i);
-	    		}
-	    	}
-	    	if (lists.size() == 0)
-	    		break;
-	    	p->next = new ListNode(min);
-	    	p = p->next;
-	    	lists[pos_i] = lists[pos_i]->next;	
-    	}
-    	return head->next;
-    }    
-};
+
 ```
 
 #### **[11.盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)**
