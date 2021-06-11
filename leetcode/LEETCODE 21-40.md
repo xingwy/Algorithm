@@ -486,3 +486,230 @@ var divide = function(dividend, divisor) {
 };
 ```
 
+#### **[30.Substring with Concatenation of All Words](https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words/)**
+
+Problem：You are given a string s and an array of strings words of the same length. Return all starting indices of substring(s) in s that is a concatenation of each word in words exactly once, in any order, and without any intervening characters.
+
+You can return the answer in any order.
+
+Example：
+
+```markdown
+Input: s = "barfoothefoobarman", words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoo" and "foobar" respectively.
+The output order does not matter, returning [9,0] is fine too.
+```
+
+```js
+/**
+ * @param {string} s
+ * @param {string[]} words
+ * @return {number[]}
+ */
+
+// todo 代码可以简化,不过思路大致不变
+var findSubstring = function(s, words) {
+    let wordSize = words[0].length;
+    let wordCount = words.length;
+    let result = [];
+   
+    const getList = function (i, s, d) {
+        let list = [];
+        let str = '';
+        for (let k=i; k<s.length; k++) {
+            str += s[k];
+            if (str.length >= d) {
+                list.push(str);
+                str = '';
+            }
+        }
+        return list;
+    }
+    for (let i=0; i<wordSize; i++) {
+        let list = getList(i, s, wordSize);
+        let start = 0;
+        let end = 0;
+        let _mapWord = new Map();
+        for (let word of words) {
+            let count = _mapWord.get(word) || 0;
+            _mapWord.set(word, count + 1);
+        }
+        while (start <list.length && end < list.length) {
+            if (end == 7) {
+                console.log(_mapWord)
+            }
+            let v = _mapWord.get(list[end]);
+            // 没有该值
+            if (v == null) {
+                // 还原_mapWord
+                for (let k=start; k<end; k++) {
+                    let count = _mapWord.get(list[k]);
+                    _mapWord.set(list[k], count + 1);
+                }
+                end++;
+                start = end;
+            } else {
+                // 未剩余该值
+                if (v == 0) {
+                    if (list[start] == list[end]) {
+                        // 后移
+                        start++;
+                        end++;
+                    } else {
+                        // 还原_mapWord
+                        let count = _mapWord.get(list[start]);
+                        _mapWord.set(list[start], count + 1);
+                        start += 1;
+                    }
+                } else {
+                    // 还有剩余
+                    _mapWord.set(list[end], v-1);
+                    end++;
+                }
+            }
+            if (end - start == wordCount) {
+                // 满足匹配
+                for (let k=start; k<end; k++) {
+                    let count = _mapWord.get(list[k]);
+                    _mapWord.set(list[k], count + 1);
+                }
+                result.push(i + start*wordSize);
+                start += 1;
+                end = start;
+            }
+        }
+    }
+    return result;
+};
+```
+
+#### **[31.Next Permutation](https://leetcode-cn.com/problems/next-permutation/)**
+
+Problem：
+
+```markdown
+Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+If such an arrangement is not possible, it must rearrange it as the lowest possible order (i.e., sorted in ascending order).
+
+The replacement must be in place and use only constant extra memory.
+```
+
+Example：
+
+```markdown
+Input: nums = [5,6,4,3,2,1]
+Output: [6,1,2,3,4,5]
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var nextPermutation = function(nums) {
+    if (nums.length <= 1) {
+        return nums;
+    }
+    let index = 0;
+    for (let i=nums.length-1; i>=1; i--) {
+        if (nums[i] > nums[i-1]) {
+            for (let j = nums.length-1; j >= i; j--) {
+                if (nums[j] > nums[i-1]) {
+                    let t = nums[j];
+                    nums[j] = nums[i-1];
+                    nums[i-1] = t;
+                    break;
+                }
+            }
+            index = i;
+            break;
+        }
+    }
+    let start = index;
+    let end = nums.length-1;
+    while (start < end) {
+        let t = nums[start];
+        nums[start] = nums[end];
+        nums[end] = t;
+        start++;
+        end--;
+    }
+};
+```
+
+#### **[32.Longest Valid Parentheses](https://leetcode-cn.com/problems/longest-valid-parentheses/)**
+
+Problem：
+
+```markdown
+Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+```
+
+Example：
+
+```markdown
+Input: s = "(()"
+Output: 2
+Explanation: The longest valid parentheses substring is "()".
+```
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var longestValidParentheses = function(s) {
+    // dp[i][j] 表示 i~j 是否为完整有效括号
+    let max = 0;
+    
+    let stack = [-1];
+    for (let i=0; i<s.length; i++) {
+        if (s[i] == "(") {
+            stack.push(i);
+        } else {
+            stack.pop();
+            if (stack.length) {
+                max = Math.max(max, i-stack[stack.length-1]);
+            } else {
+                stack.push(i);
+            }
+        }
+    }
+    return max;
+};
+```
+
+#### **[33.Search in Rotated Sorted Array](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)**
+
+Problem：
+
+```markdown
+There is an integer array nums sorted in ascending order (with distinct values).
+
+Prior to being passed to your function, nums is rotated at an unknown pivot index k (0 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+
+Given the array nums after the rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+
+You must write an algorithm with O(log n) runtime complexity.
+```
+
+Example：
+
+```markdown
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function(nums, target) {
+  	
+};
+```
+
