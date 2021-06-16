@@ -95,6 +95,25 @@ var trap = function(height) {
 };
 ```
 
+#### **[43.Multiply Strings](https://leetcode-cn.com/problems/multiply-strings/)**
+
+Problem：
+
+```markdown
+Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string.
+
+Note: You must not use any built-in BigInteger library or convert the inputs to integer directly.
+```
+
+Example：
+
+```markdown
+Input: num1 = "2", num2 = "3"
+Output: "6"
+```
+
+
+
 #### **55. Jump Game**
 
 Problem: Given an array of non-negative intergers, you are initially positioned at the first index of the array.
