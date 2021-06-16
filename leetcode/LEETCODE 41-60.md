@@ -275,6 +275,59 @@ Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
 };
 ```
 
+#### **[47.Permutations II](https://leetcode-cn.com/problems/permutations-ii/)**
+
+Problem：
+
+```markdown
+Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
+```
+
+Example：
+
+```markdown
+Input: nums = [1,1,2]
+Output:
+[[1,1,2],
+ [1,2,1],
+ [2,1,1]]
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permuteUnique = function(nums) {
+    let result = [];
+    let set_ = new Set();
+    let h = function(index) {
+        if (index == nums.length-1) {
+            if (set_.has(nums.join(""))) {
+                return;
+            }
+            result.push([...nums]);
+            set_.add(nums.join(""));
+            return;
+        }
+        for (let j=index; j<nums.length; j++) {
+            if (j < nums.length-1 &&  nums[j] == nums[j+1]) {
+                continue;
+            }
+            let t = nums[index];
+            nums[index] = nums[j];
+            nums[j] = t;
+            h(index+1);
+            t = nums[index];
+            nums[index] = nums[j];
+            nums[j] = t;
+        }
+    }
+    h(0);
+    return result;
+};
+```
+
 
 
 #### **55. Jump Game**
