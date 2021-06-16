@@ -51,7 +51,49 @@ public:
 };
 ```
 
+#### **[42.Trapping Rain Water](https://leetcode-cn.com/problems/trapping-rain-water/)**
 
+Problem：
+
+```markdown
+Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+```
+
+![rainwatertrap_42](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/rainwatertrap_42.png)
+
+Example：
+
+```markdown
+Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
+```
+
+```js
+
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var trap = function(height) {
+    let leftWall = 0;
+    let rightWall = 0;
+    let sum = 0;
+    let i = 0;
+    let j = height.length-1;
+    while(i < j) {
+        if (height[i] < height[j]) {
+            height[i] >= leftWall ? (leftWall = height[i]) : (sum += (leftWall-height[i]));
+            i++;
+        } else {
+            height[j] >= rightWall ? (rightWall = height[j]) : (sum += (rightWall-height[j]));
+            j--;
+        }
+    }
+    return sum;
+    
+};
+```
 
 #### **55. Jump Game**
 
