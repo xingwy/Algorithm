@@ -112,6 +112,169 @@ Input: num1 = "2", num2 = "3"
 Output: "6"
 ```
 
+```js
+/**
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var multiply = function(num1, num2) {
+    num1 = num1.split("").filter((v)=>v).map((v) => Number(v)).reverse();
+    num2 = num2.split("").filter((v)=>v).map((v) => Number(v)).reverse();
+    if (!num1.length || !num2.length) {
+        return "0";
+    }
+
+    if (num1[0] == 0 && num1.length == 1 || num2[0] == 0 && num2.length == 1) {
+        return "0";
+    }
+    let mul = function(arr, n, t) {
+        let index = 0;
+        
+        for (let i=0; i<arr.length; i++) {
+            let v = arr[i]*n + index;
+            t.push(v%10);
+            index = Math.floor(v/10);
+        }
+        while(index) {
+            t.push(index%10);
+            index = Math.floor(index/10);
+        }
+        return t;
+    }
+
+    let add = function(a, b) {
+        let t = [];
+        let flag = 0;
+        for (let i=0; i<Math.max(a.length, b.length); i++) {
+            flag += ((a[i] || 0) + (b[i] || 0));
+            t.push(flag%10);
+            flag = Math.floor(flag/10);
+        }
+        while (flag) {
+            t.push(flag%10);
+            flag = Math.floor(flag/10);
+        }
+        return t;
+    }
+    let total = [];
+    let t = [];
+    for (let i=0; i<num2.length; i++) {
+        total.push(mul(num1, num2[i], [].concat(t)));
+        t.push(0);
+    }
+    let res = [];
+    for (let i=0; i<total.length; i++) {
+        if (i==0) {
+            res = total[i];
+        } else {
+            res = add(res, total[i]);
+        }
+    }
+    return res.reverse().join("");
+};
+```
+
+#### **[45.Jump Game II](https://leetcode-cn.com/problems/jump-game-ii/)**
+
+Problem：
+
+```markdown
+Given an array of non-negative integers nums, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+Your goal is to reach the last index in the minimum number of jumps.
+```
+
+Example：
+
+```markdown
+Input: nums = [2,3,1,1,4]
+Output: 2
+Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var jump = function(nums) {
+    if (nums.length <= 1) {
+        return 0;
+    }
+    // 当前所能达到的最大步数和时间
+    let max = 0;
+    let cnt = 0;
+    for (let i=0; i<nums.length;) {
+        if (i==0) {
+            max = nums[i];
+            cnt++;
+            i++;
+        } else {
+            let t = max;
+            cnt++;
+            while(i <= t && i<nums.length) {
+                if (max < nums[i]+i) {
+                    max = nums[i]+i;
+                }
+                i++;
+                if (max >= nums.length-1) {
+                    return cnt;
+                }
+            }
+        }
+        if (max >= nums.length-1) {
+            return cnt;
+        }
+    }
+    return cnt;
+};
+```
+
+#### **[46.Permutations](https://leetcode-cn.com/problems/permutations/)**
+
+Problem：
+
+```markdown
+Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
+```
+
+Example：
+
+```markdown
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+ var permute = function(nums) {
+    let result = [];
+
+    let h = function(index) {
+        if (index == nums.length-1) {
+            result.push([...nums]);
+            return;
+        }
+        for (let j=index; j<nums.length; j++) {
+            let t = nums[index];
+            nums[index] = nums[j];
+            nums[j] = t;
+            h(index+1);
+            t = nums[index];
+            nums[index] = nums[j];
+            nums[j] = t;
+        }
+    }
+    h(0);
+    return result;
+};
+```
+
 
 
 #### **55. Jump Game**
