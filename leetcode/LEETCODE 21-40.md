@@ -4,9 +4,7 @@
 
 Problem:
 
-```text
 Merge two sorted linked lists and return it as a new list. The new List should be made by splicing together the nodes of the first two lists.
-```
 
 Example:
 
@@ -17,9 +15,7 @@ Output: 1->1->2->3->4->4
 
 Solutions:
 
-```text
 The linked lists have been sorted, so we can start from the first element and compare the item in order to choose the best item.
-```
 
 Code:
 
@@ -65,9 +61,7 @@ public:
 
 Problem:
 
-```text
 Given n pairs of parentheses,write a function to generate all combinations of well-formed parentheses.
-```
 
 Example:
 
@@ -113,9 +107,7 @@ var generateParenthesis = function(n) {
 
 Problem:
 
-```text
 Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
-```
 
 Example:
 
@@ -130,9 +122,7 @@ Output: 1->1->2->3->4->4->5->6
 
 Solutions:
 
-```text
 As same as problem 21, we need choose a best item and insert into the result linked list.
-```
 
 Code:
 
@@ -176,10 +166,8 @@ public:
 
 Problem:
 
-```text
 Given a linked list,swap every two adjacent nodes and return its head.
 You may not mpdify the values in the list's nodes,only nodes itself may be changed
-```
 
 Example:
 
@@ -189,9 +177,7 @@ Given 1->2->3->4, you should return the list as 2->1->4->3
 
 Solutions:
 
-```text
 This problem's solution is a special method of problem 25's. Set K being equal to 2.
-```
 
 Code:
 
@@ -229,10 +215,8 @@ public:
 
 Problem:
 
-```text
 Given a linked list. reverse the nodes of a linked list k at a time and return its modified list.
 k is a positive integer and is less than or equal to the length of the length of the linked list. if the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
-```
 
 Example:
 
@@ -249,9 +233,7 @@ Note:
 
 Solutions:
 
-```text
 Taking a step-bu-step approach, we need make this linked list be smaller linked list with number K, for each small linked list, reverse it.
-```
 
 Code:
 
@@ -287,19 +269,18 @@ public:
 
 Problem:
 
-```markdown
 Given a sorted array nums, remove the duplicates in-place such that each element appears only once and returns the new length.
 
 Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.
-```
 
 Example:
 
 ```markdown
 Input: nums = [1,1,2]
 Output: 2, nums = [1,2]
-Explanation: Your function should return length = 2, with the first two elements of nums being 1 and 2 respectively. It doesn't matter what you leave beyond the returned length.
 ```
+
+Explanation: Your function should return length = 2, with the first two elements of nums being 1 and 2 respectively. It doesn't matter what you leave beyond the returned length.
 
 ```js
 /**
@@ -358,9 +339,9 @@ Problems:
 
 ```markdown
 Implement strStr().
+```
 
 Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
-```
 
 Example:
 
@@ -420,7 +401,6 @@ var strStr = function(haystack, needle) {
 
 Problems:
 
-```markdown
 Given two integers dividend and divisor, divide two integers without using multiplication, division, and mod operator.
 
 Return the quotient after dividing dividend by divisor.
@@ -428,7 +408,6 @@ Return the quotient after dividing dividend by divisor.
 The integer division should truncate toward zero, which means losing its fractional part. For example, truncate(8.345) = 8 and truncate(-2.7335) = -2.
 
 Note: Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−231, 231 − 1]. For this problem, assume that your function returns 231 − 1 when the division result overflows.
-```
 
 Example:
 
@@ -497,9 +476,10 @@ Example：
 ```markdown
 Input: s = "barfoothefoobarman", words = ["foo","bar"]
 Output: [0,9]
+```
+
 Explanation: Substrings starting at index 0 and 9 are "barfoo" and "foobar" respectively.
 The output order does not matter, returning [9,0] is fine too.
-```
 
 ```js
 /**
@@ -588,13 +568,11 @@ var findSubstring = function(s, words) {
 
 Problem：
 
-```markdown
 Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
 
 If such an arrangement is not possible, it must rearrange it as the lowest possible order (i.e., sorted in ascending order).
 
-The replacement must be in place and use only constant extra memory.
-```
+The replacement must be in place and use only constant extra memory.
 
 Example：
 
@@ -643,17 +621,16 @@ var nextPermutation = function(nums) {
 
 Problem：
 
-```markdown
 Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
-```
 
 Example：
 
 ```markdown
 Input: s = "(()"
 Output: 2
-Explanation: The longest valid parentheses substring is "()".
 ```
+
+Explanation: The longest valid parentheses substring is "()".
 
 ```js
 /**
@@ -685,15 +662,13 @@ var longestValidParentheses = function(s) {
 
 Problem：
 
-```markdown
 There is an integer array nums sorted in ascending order (with distinct values).
 
 Prior to being passed to your function, nums is rotated at an unknown pivot index k (0 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
 
 Given the array nums after the rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
 
-You must write an algorithm with O(log n) runtime complexity.
-```
+You must write an algorithm with O(log n) runtime complexity.
 
 Example：
 
@@ -781,11 +756,9 @@ var searchRange = function(nums, target) {
 
 Problem：
 
-```markdown
 Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
 
-You must write an algorithm with O(log n) runtime complexity.
-```
+You must write an algorithm with O(log n) runtime complexity.
 
 Example：
 
@@ -823,17 +796,15 @@ var searchInsert = function(nums, target) {
 
 Problem：
 
-```markdown
-Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
 
-Each row must contain the digits 1-9 without repetition.
-Each column must contain the digits 1-9 without repetition.
-Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+Each row must contain the digits 1-9 without repetition.
+Each column must contain the digits 1-9 without repetition.
+Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
 Note:
 
 A Sudoku board (partially filled) could be valid but is not necessarily solvable.
-Only the filled cells need to be validated according to the mentioned rules.
-```
+Only the filled cells need to be validated according to the mentioned rules.
 
 ![sudoku_36](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/sudoku_36.png)
 
@@ -904,16 +875,14 @@ var isValidSudoku = function(board) {
 
 Problem：
 
-```markdown
 Write a program to solve a Sudoku puzzle by filling the empty cells.
 
-A sudoku solution must satisfy all of the following rules:
+A sudoku solution must satisfy all of the following rules:
 
-Each of the digits 1-9 must occur exactly once in each row.
-Each of the digits 1-9 must occur exactly once in each column.
-Each of the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
 The '.' character indicates empty cells.
-```
 
 ![sudoku _solver_37](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/sudoku _solver_37.png)
 
@@ -997,26 +966,24 @@ var solveSudoku = function(board) {
 
 Problem：
 
-```markdown
 The count-and-say sequence is a sequence of digit strings defined by the recursive formula:
 
 countAndSay(1) = "1"
 countAndSay(n) is the way you would "say" the digit string from countAndSay(n-1), which is then converted into a different digit string.
 To determine how you "say" a digit string, split it into the minimal number of groups so that each group is a contiguous section all of the same character. Then for each group, say the number of characters, then say the character. To convert the saying into a digit string, replace the counts with a number and concatenate every saying.
 
-```
-
 Example：
 
 ```markdown
 Input: n = 4
 Output: "1211"
+```
+
 Explanation:
 countAndSay(1) = "1"
 countAndSay(2) = say "1" = one 1 = "11"
 countAndSay(3) = say "11" = two 1's = "21"
 countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
-```
 
 ```js
 /**
@@ -1065,24 +1032,23 @@ var countAndSay = function(n) {
 
 Problem：
 
-```markdown
 Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
 
 The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
 
 It is guaranteed that the number of unique combinations that sum up to target is less than 150 combinations for the given input.
-```
 
 Example：
 
 ```markdown
 Input: candidates = [2,3,6,7], target = 7
 Output: [[2,2,3],[7]]
+```
+
 Explanation:
 2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
 7 is a candidate, and 7 = 7.
 These are the only two combinations.
-```
 
 ```js
 /**
@@ -1121,13 +1087,11 @@ var combinationSum = function(candidates, target) {
 
 Problem：
 
-```markdown
-Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
+Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
 
-Each number in candidates may only be used once in the combination.
+Each number in candidates may only be used once in the combination.
 
-Note: The solution set must not contain duplicate combinations.
-```
+Note: The solution set must not contain duplicate combinations.
 
 Example：
 
