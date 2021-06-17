@@ -1,6 +1,6 @@
 ### **LEETCODE 41-60**
 
-#### **41. First Missing Positive**
+#### **[41.First Missing Positive](https://leetcode-cn.com/problems/first-missing-positive/)**
 
 Promise：Given an unsort interger array,find the smallest missing positive integer, your algorithm should run in O(n) time and uses constant space
 
@@ -324,6 +324,88 @@ var permuteUnique = function(nums) {
         }
     }
     h(0);
+    return result;
+};
+```
+
+#### **[48.Rotate Image](https://leetcode-cn.com/problems/rotate-image/)**
+
+Problem：
+
+```markdown
+You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
+
+You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
+```
+
+![mat1](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/mat1.jpg)
+
+Example：
+
+```markdown
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [[7,4,1],[8,5,2],[9,6,3]]
+```
+
+```js
+/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var rotate = function(matrix) {
+    let N = matrix.length;
+    for (let i=0; i<N/2; i++) {
+        for (let j=0; j<N; j++) {
+            let tmp = matrix[i][j];
+            matrix[i][j] = matrix[N-i-1][j];
+            matrix[N-i-1][j] = tmp;
+        }
+    }
+    for (let i=0; i<N; i++) {
+        for (let j=0; j<i; j++) {
+            let tmp = matrix[i][j];
+            matrix[i][j] = matrix[j][i];
+            matrix[j][i] = tmp;
+        }
+    }
+};
+```
+
+#### **[49.Group Anagrams](https://leetcode-cn.com/problems/group-anagrams/)**
+
+Problem：
+
+```markdown
+Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+```
+
+Example：
+
+```markdown
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+```
+
+```js
+/**
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = function(strs) {
+    let _map = new Map();
+    for (let s of strs) {
+        let key = s.split("").sort((a, b) => (a>b ? 1 : -1)).join("");
+        if (!_map.has(key)) {
+            _map.set(key, new Array());
+        }
+        _map.get(key).push(s);
+    }
+    let result = [];
+    for (let [k, v] of _map) {
+        result.push(v);
+    }
     return result;
 };
 ```
