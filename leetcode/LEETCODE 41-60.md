@@ -609,9 +609,66 @@ var maxSubArray = function(nums) {
 };
 ```
 
+#### **[54.Spiral Matrix](https://leetcode-cn.com/problems/spiral-matrix/)**
 
+Problem：
 
-#### **55. Jump Game**
+Given an `m x n` `matrix`, return *all elements of the* `matrix` *in spiral order*.
+
+Example：
+
+![spiral_54](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/spiral_54.jpg)
+
+```markdown
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,3,6,9,8,7,4,5]
+```
+
+```js
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var spiralOrder = function(matrix) {
+    if (!matrix.length) {
+        return [];
+    }
+    let dfs = function(m, n, i) {
+        let total;
+        if (m <=0 || n <= 0) {
+            return [];
+        }
+        if (m == 1 || n == 1) {
+            total = m*n;
+        } else {
+            total = 2*(m+n) - 4;
+        }
+        if(total < 0) {
+            return []
+        }
+        let res = [];
+        let pos_i = i;
+        let pos_j = i;
+        for (let k=1; k<=total; k++) {
+            res.push(matrix[pos_i][pos_j]);
+            if (k < m) {
+                pos_j++;
+            } else if (k>=m && k<(m+n-1)) {
+                pos_i++;
+            } else if (k>=(m+n-1) && k<(2*m+n-2)) {
+                pos_j--;
+            } else if (k <total) {
+                pos_i--;
+            }
+        }
+        res.push(...dfs(m-2, n-2, i+1));
+        return res;
+    }
+    return dfs(matrix[0].length, matrix.length, 0);
+};
+```
+
+#### **[55.Jump Game](https://leetcode-cn.com/problems/jump-game/)**
 
 Problem: Given an array of non-negative intergers, you are initially positioned at the first index of the array.
 
@@ -657,7 +714,7 @@ public:
 };
 ```
 
-#### **56. Merge Intervals**
+#### **[56.Merge Intervals](https://leetcode-cn.com/problems/merge-intervals/)**
 
 Given a collection of intervals, merge all overlapping intervals.
 
@@ -712,7 +769,7 @@ var merge = function(intervals) {
 };
 ```
 
-#### **57. Insert Interval**
+#### **[57.Insert Interval](https://leetcode-cn.com/problems/insert-interval/)**
 
 Given a set of non-overlapping intervals, insert a new interval into the intervals(merge if necessary).
 
