@@ -873,6 +873,101 @@ Input: n = 3
 Output: [[1,2,3],[8,9,4],[7,6,5]]
 ```
 
+```js
+/**
+ * @param {number} n
+ * @return {number[][]}
+ */
+var generateMatrix = function(n) {
+    let matrix = [];
+    for (let i=0; i<n; i++) {
+        matrix.push([]);
+    }
+    let index = 0;
+    let dfs = function(m, n, i) {
+        let total;
+        if (m <=0 || n <= 0) {
+            return [];
+        }
+        if (m == 1 || n == 1) {
+            total = m*n;
+        } else {
+            total = 2*(m+n) - 4;
+        }
+        if(total < 0) {
+            return []
+        }
+        let pos_i = i;
+        let pos_j = i;
+        for (let k=1; k<=total; k++) {
+            matrix[pos_i][pos_j] = ++index;
+            if (k < m) {
+                pos_j++;
+            } else if (k>=m && k<(m+n-1)) {
+                pos_i++;
+            } else if (k>=(m+n-1) && k<(2*m+n-2)) {
+                pos_j--;
+            } else if (k <total) {
+                pos_i--;
+            }
+        }
+        dfs(m-2, n-2, i+1)
+    }
+    dfs(n, n, 0);
+    return matrix;
+};
+```
+
+#### **[60.Permutation Sequence](https://leetcode-cn.com/problems/permutation-sequence/)**
+
+Problem：
+
+The set [1, 2, 3, ..., n] contains a total of n! unique permutations.
+
+By listing and labeling all of the permutations in order, we get the following sequence for n = 3:
+
+1. `"123"`
+2. `"132"`
+3. `"213"`
+4. `"231"`
+5. `"312"`
+6. `"321"`
+
+Given `n` and `k`, return the `kth` permutation sequence.
+
+Example：
+
+```markdown
+Input: n = 3, k = 3
+Output: "213"
+```
+
+```js
+ var getPermutation = function(n, k) {
+    k--;
+    let nums = [];
+    let acl = function(c) {
+        if (c <= 1) {
+            return 1;
+        }
+        return acl(c-1)*c;
+    }
+    for (let i=1; i<=n; i++) {
+        nums.push(i);
+    }
+    let result = [];
+    for (let i=n; i>=1; i--) {
+        let flag = acl(i-1);
+        let id = Math.floor(k/flag);
+        result.push(nums[id]);
+        nums[id] = null;
+        nums = nums.filter((v) => v);
+        k %= flag;
+    }
+    return result.join("");
+};
+```
+
 
 
 
