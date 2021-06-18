@@ -512,6 +512,103 @@ var solveNQueens = function(n) {
 };
 ```
 
+#### **[52.N-Queens II](https://leetcode-cn.com/problems/n-queens-ii/)**
+
+Problem：
+
+The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
+
+Given an integer n, return the number of distinct solutions to the n-queens puzzle.
+
+Example：
+
+![queens_51](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/queens_51.jpg)
+
+```markdown
+Input: n = 4
+Output: 2
+```
+
+Explanation: There are two distinct solutions to the 4-queens puzzle as shown.
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var totalNQueens = function(n) {
+    // 全排列题+剪枝
+    let res = 0;
+    let list = [];
+    let use_map_up = new Set();
+    let use_map_down = new Set();
+    for (let i=0; i<n; i++) {
+        list.push(i)
+    }
+    let dfs = function(i, arr) {
+        if (i == arr.length-1) {
+            // 结束
+            if (!use_map_up.has(arr[i]+i-1) && !use_map_down.has(arr[i]-i+1)) {
+                res++;
+            }
+        } else {
+            // 剪枝
+            // 剩余皇后选点
+            for (let j=i; j<arr.length; j++) {
+                let t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+                if (!use_map_up.has(arr[i]+i-1) && !use_map_down.has(arr[i]-i+1)) {
+                    
+                    use_map_up.add(arr[i]+i-1);
+                    use_map_down.add(arr[i]-i+1);
+                    dfs(i+1, arr);
+                    use_map_up.delete(arr[i]+i-1);
+                    use_map_down.delete(arr[i]-i+1);
+                }
+                t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+            }
+        }
+    }
+    dfs(0, list);
+    return res;
+};
+```
+
+#### **[53.Maximum Subarray](https://leetcode-cn.com/problems/maximum-subarray/)**
+
+Problem：
+
+Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+
+Example：
+
+```markdown
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+```
+
+Explanation: [4,-1,2,1] has the largest sum = 6.
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
+    if (!nums.length) return 0;
+    let tmp = nums[0];
+    let max = nums[0];
+    for (let i=1; i<nums.length; i++) {
+        if (tmp < 0) {
+            tmp = nums[i];;
+        } else {
+            tmp += nums[i];
+        }
+        max = Math.max(tmp, max);
+    }
+    return max;
+};
+```
+
 
 
 #### **55. Jump Game**
