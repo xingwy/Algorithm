@@ -825,6 +825,54 @@ var insert = function(intervals, newInterval) {
 };
 ```
 
+#### **[58.Length of Last Word](https://leetcode-cn.com/problems/length-of-last-word/)**
+
+Problem：
+
+Given a string s consists of some words separated by spaces, return the length of the last word in the string. If the last word does not exist, return 0.
+
+A word is a maximal substring consisting of non-space characters only.
+
+Example：
+
+```markdown
+Input: s = "Hello World"
+Output: 5
+```
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLastWord = function(s) {
+    let index = 0;
+    for (let i=s.length-1; i>=0; i--) {
+        if (s[i] != ' ') {
+            index++;
+        } else {
+            if (index != 0) break;
+        }
+    }
+    return index;
+};
+```
+
+#### **[59.Spiral Matrix II](https://leetcode-cn.com/problems/spiral-matrix-ii/)**
+
+Problem：
+
+Given a positive integer n, generate an n x n matrix filled with elements from 1 to n2 in spiral order.
+
+Example：
+
+![spiraln_59](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/spiraln_59.jpg)
+
+```markdown
+Input: n = 3
+Output: [[1,2,3],[8,9,4],[7,6,5]]
+```
+
 
 
 
