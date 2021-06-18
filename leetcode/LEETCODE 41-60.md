@@ -396,6 +396,122 @@ var groupAnagrams = function(strs) {
 };
 ```
 
+#### **[50.Pow(x, n)](https://leetcode-cn.com/problems/powx-n/)**
+
+Problem：
+
+Implement [pow(x, n)](http://www.cplusplus.com/reference/valarray/pow/), which calculates `x` raised to the power `n` (i.e., `xn`).
+
+Example：
+
+```markdown
+Input: x = 2.00000, n = 10
+Output: 1024.00000
+
+Input: x = 2.00000, n = -2
+Output: 0.25000
+Explanation: 2-2 = 1/22 = 1/4 = 0.25
+```
+
+```js
+if (n<0) {
+        x = 1/x;
+        n = -n;
+    }
+    if (n == 0) {
+        return 1;
+    }
+    let dfs = function(index) {
+        if (index == 1) {
+            return x;
+        } else {
+            if (index%2) {
+                let v = dfs(index-1)*x;
+                return v;
+            } else {
+                let v = dfs(index/2);
+                return v*v;
+            }
+        }
+    }
+    return dfs(n);
+};
+```
+
+#### **[51.N-Queens](https://leetcode-cn.com/problems/n-queens/)**
+
+Problem：The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
+
+Given an integer n, return all distinct solutions to the n-queens puzzle. You may return the answer in any order.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space, respectively.
+
+![queens_51](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/queens_51.jpg)
+
+Example：
+
+```markdown
+Input: n = 4
+Output: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+```
+
+Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.
+
+```js
+/**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function(n) {
+    // 全排列题+剪枝
+    let res = [];
+    let list = [];
+    let use_map_up = new Set();
+    let use_map_down = new Set();
+    for (let i=0; i<n; i++) {
+        list.push(i)
+    }
+    let base = [];
+    for (let i=0; i<n; i++) {
+        base.push(".");
+    }
+    let dfs = function(i, arr) {
+        if (i == arr.length-1) {
+            // 结束
+            if (!use_map_up.has(arr[i]+i-1) && !use_map_down.has(arr[i]-i+1)) {
+                res.push([].concat(arr))
+            }
+        } else {
+            // 剪枝
+            // 剩余皇后选点
+            for (let j=i; j<arr.length; j++) {
+                let t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+                if (!use_map_up.has(arr[i]+i-1) && !use_map_down.has(arr[i]-i+1)) {
+                    
+                    use_map_up.add(arr[i]+i-1);
+                    use_map_down.add(arr[i]-i+1);
+                    dfs(i+1, arr);
+                    use_map_up.delete(arr[i]+i-1);
+                    use_map_down.delete(arr[i]-i+1);
+                }
+                t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+            }
+        }
+    }
+    dfs(0, list);
+    res = res.map((v) => {
+        let t = [];
+        for (let k=0; k<v.length; k++) {
+            let s = [].concat(base);
+            s[v[k]] = "Q";
+            t.push(s.join(""));
+        }
+        return t;
+    })
+    return res;
+};
+```
+
 
 
 #### **55. Jump Game**
