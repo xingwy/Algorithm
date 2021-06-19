@@ -259,7 +259,47 @@ var plusOne = function(digits) {
 };
 ```
 
+#### **[67.Add Binary](https://leetcode-cn.com/problems/add-binary/)**
 
+Problem：
+
+Given two binary strings `a` and `b`, return *their sum as a binary string*.
+
+Example：
+
+```markdown
+Input: a = "11", b = "1"
+Output: "100"
+```
+
+```js
+/**
+ * @param {string} a
+ * @param {string} b
+ * @return {string}
+ */
+var addBinary = function(a, b) {
+    let maxS = a.length >= b.length ? a : b;
+    let minS = a.length < b.length ? a : b;
+    
+    let res = [];
+    minL = minS.split("");
+    maxL = maxS.split("");
+    let base = 0;
+    while (maxL.length || base > 0) {
+        let v1 = maxL.pop()
+        let v2 = minL.pop();
+        v1 = v1 ? Number(v1) : 0;
+        v2 = v2 ? Number(v2) : 0;
+
+        base = v1 + v2 + base;
+
+        res.push(String(base%2));
+        base = Math.floor(base/2);
+    }
+    return res.reverse().join("");
+};
+```
 
 
 
