@@ -301,5 +301,45 @@ var addBinary = function(a, b) {
 };
 ```
 
+#### **[70.Climbing Stairs](https://leetcode-cn.com/problems/climbing-stairs/)**
 
+Problem：
+
+You are climbing a staircase. It takes n steps to reach the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+Example：
+
+```markdown
+Input: n = 3
+Output: 3
+```
+
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+let _map = new Map();
+var climbStairs = function(n) {
+  if (_map.has(n)) {
+    return _map.get(n);
+  }
+  if (n <= 0) {
+      return 0;
+  }
+  if (n <= 3) {
+      return n;
+  }
+  let v = climbStairs(n-1) + climbStairs(n-2);
+  _map.set(n, v);
+  return v;
+};
+```
 
