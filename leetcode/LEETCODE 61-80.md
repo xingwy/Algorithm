@@ -343,3 +343,88 @@ var climbStairs = function(n) {
 };
 ```
 
+#### **[79.Word Search](https://leetcode-cn.com/problems/word-search/)**
+
+Problem：
+
+Given an m x n grid of characters board and a string word, return true if word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+Example：
+
+![word2_79](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/word2_79.jpg)
+
+```markdown
+Input: board = [
+    ["A","B","C","E"],
+    ["S","F","C","S"],
+    ["A","D","E","E"]
+], word = "ABCCED"
+Output: true
+```
+
+```js
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
+    
+    for (let i=0; i<board.length; i++) {
+        for (let j=0; j<board[i].length; j++) {
+            let path = new Set();
+            let res = dfs(board, i, j, word, 0, path);
+            if (res) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+let dfs = function(board, p_i, p_j, word, curIndex, path) {
+    if (curIndex >= word.length) {
+        return true;
+    }
+    if (path.has(p_i+"-"+p_j)) {
+        return false;
+    }
+    if (p_i < 0 || p_i >= board.length || p_j < 0 || p_j >= board[0].length) {
+        return false;
+    }
+    let key = word[curIndex];
+    if (board[p_i][p_j] != key) {
+        return false;
+    }
+
+    path.add(p_i+"-"+p_j);
+    let r1 = dfs(board, p_i+1, p_j, word, curIndex+1, path);
+    if (r1) {
+        path.delete(p_i+"-"+p_j);
+        return r1;
+    }
+    
+    let r2 = dfs(board, p_i-1, p_j, word, curIndex+1, path);
+    if (r2) {
+        path.delete(p_i+"-"+p_j);
+        return r2;
+    }
+    let r3 = dfs(board, p_i, p_j+1, word, curIndex+1, path);
+
+    if (r3) {
+        path.delete(p_i+"-"+p_j);
+        return r3;
+    }
+    let r4 = dfs(board, p_i, p_j-1, word, curIndex+1, path);
+
+    if (r4) {
+        path.delete(p_i+"-"+p_j);
+        return r4;
+    }
+    path.delete(p_i+"-"+p_j);
+    return false;
+}
+```
+
