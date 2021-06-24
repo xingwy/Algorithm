@@ -298,5 +298,76 @@ var inorderTraversal = function(root) {
 };
 ```
 
+#### **[95.Unique Binary Search Trees II](https://leetcode-cn.com/problems/unique-binary-search-trees-ii/)**
 
+Problem：
+
+Given an integer n, return all the structurally unique BST's (binary search trees), which has exactly n nodes of unique values from 1 to n. Return the answer in any order.
+
+Example：
+
+![uniquebstn3](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/uniquebstn3.jpg)
+
+```markdown
+Input: n = 3
+Output: [
+	[1,null,2,null,3],
+	[1,null,3,2],
+	[2,1,3],
+	[3,1,null,null,2],
+	[3,2,null,1]
+]
+```
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {number} n
+ * @return {TreeNode[]}
+ */
+var generateTrees = function(n) {
+    let _map = new Map();
+    let dfs = function(left, right) {
+        if (left == right) {
+            return [new TreeNode(left)];
+        }
+        if (_map.has(`${left}_${right}`)) {
+            return _map.get(`${left}_${right}`)
+        }
+        let res = [];
+        for (let i=left; i<=right; i++) {
+            if (i == left) {
+                let right_nodes = dfs(i+1, right);
+                for (let r of right_nodes) {
+                    res.push(new TreeNode(i, undefined, r));
+                }
+            } else if (i == right) {
+                let left_nodes = dfs(left, i-1);
+                for (let l of left_nodes) {
+                    res.push(new TreeNode(i, l, undefined));
+                }
+            } else {
+                let left_nodes = dfs(left, i-1);
+                let right_nodes = dfs(i+1, right);
+                for (let l of left_nodes) {
+                    for (let r of right_nodes) {
+                        res.push(new TreeNode(i, l, r));
+                    }
+                }
+            }
+        }
+        _map.set(`${left}_${right}`, res);
+        return res;
+    }
+
+    return dfs(1,n);
+};
+```
 
