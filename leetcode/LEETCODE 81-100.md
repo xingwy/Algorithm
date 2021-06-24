@@ -124,3 +124,63 @@ var numDecodings = function(s) {
 };
 ```
 
+#### **[92.Reverse Linked List II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)**
+
+Problem：
+
+Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
+
+Example：
+
+![rev2ex2](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/rev2ex2.jpg)
+
+```markdown
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+```
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = function(s) {
+    if (s == "0") {
+        return 0;
+    }
+    let _map = new Map();
+    let dfs = function(index) {
+        if (_map.has(index)) {
+            return _map.get(index);
+        }
+        if (index >= s.length) {
+            return 1;
+        }
+        let v = Number(s.substring(index,index + 2));
+        if ((v >= 11 && v <= 19) || (v>=21 && v<=26)) {
+            let t = dfs(index+1) + dfs(index+2);
+            if (!_map.has(index)) {
+                _map.set(index, t);
+            }
+            return t;
+        } else if (s[index] == "0") {
+            _map.set(index, 0);
+            return 0;
+        } else if ([10,20].includes(v)) {
+            let t = dfs(index+2);
+            if (!_map.has(index)) {
+                _map.set(index, t);
+            }
+            return t;
+        } else {
+            let t = dfs(index+1);
+            if (!_map.has(index)) {
+                _map.set(index, t);
+            }
+            return t;
+        }
+    }
+    return dfs(0);
+};
+```
+
