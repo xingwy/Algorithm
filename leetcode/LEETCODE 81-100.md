@@ -255,3 +255,48 @@ var restoreIpAddresses = function(s) {
 };
 ```
 
+#### [94.Binary Tree Inorder Traversal](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/)
+
+Given the root of a binary tree, return the inorder traversal of its nodes' values.
+
+Example：
+
+![inorder_1](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/inorder_1.jpg)
+
+```markdown
+Input: root = [1,null,2,3]
+Output: [1,3,2]
+```
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var inorderTraversal = function(root) {
+    let nums = [];
+    let arr = [];
+    let currentRoot = root;
+    while (arr.length > 0 || currentRoot) {
+        if (currentRoot) {
+        arr.push(currentRoot);
+        currentRoot = currentRoot.left;
+        } else { 
+        let p = arr.pop();
+        nums.push(p.val);
+        currentRoot = p.right;
+        }
+    }
+    return nums;
+};
+```
+
+
+
