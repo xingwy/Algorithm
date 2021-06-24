@@ -184,3 +184,74 @@ var numDecodings = function(s) {
 };
 ```
 
+#### **[93.Restore IP Addresses](https://leetcode-cn.com/problems/restore-ip-addresses/)**
+
+Problem：
+
+
+Given a string `s` containing only digits, return all possible valid IP addresses that can be obtained from `s`. You can return them in **any** order.
+
+A **valid IP address** consists of exactly four integers, each integer is between `0` and `255`, separated by single dots and cannot have leading zeros. For example, "0.1.2.201" and "192.168.1.1" are **valid** IP addresses and "0.011.255.245", "192.168.1.312" and "192.168@1.1" are **invalid** IP addresses. 
+
+ Example：
+
+```
+Input: s = "25525511135"
+Output: ["255.255.11.135","255.255.111.35"]
+```
+
+```markdown
+Input: s = "1111"
+Output: ["1.1.1.1"]
+```
+
+```js
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var restoreIpAddresses = function(s) {
+    let res = [];
+
+    let dfs = function(index, total, list) {
+        if (index == 3) {
+            if (s[total] == "0" && total != s.length-1 || !s[total]) {
+                return;
+            }
+            let v = s.substring(total);
+            if (Number(v)>=0 && Number(v)<=255) {
+                list.push(v);
+                res.push(list.join("."));
+                list.pop();
+            }
+            return;
+        }
+        if (s[total] == "0") {
+            list.push("0");
+            dfs(index+1, total+1, list);
+            list.pop();
+            return;
+        }
+        let t = 0;
+        while (true) {
+            t++;
+            let tail = total+t;
+            if (tail >= s.length) {
+                break;
+            }
+            let v = s.substring(total, tail);
+            if (Number(v)>=0 && Number(v)<=255) {
+                list.push(v);
+                dfs(index+1, total+t, list);
+                list.pop();
+            } else {
+                break;
+            }
+            
+        }
+    }
+    dfs(0,0,[]);
+    return res;
+};
+```
+
