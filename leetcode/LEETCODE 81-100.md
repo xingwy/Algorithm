@@ -412,3 +412,62 @@ var numTrees = function(n) {
 };
 ```
 
+#### **[98.Validate Binary Search Tree](https://leetcode-cn.com/problems/validate-binary-search-tree/)**
+
+Problem：
+
+Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+A valid BST is defined as follows:
+
+- The left subtree of a node contains only nodes with keys less than the node's key.
+- The right subtree of a node contains only nodes with keys greater than the node's key.
+- Both the left and right subtrees must also be binary search trees.
+
+Example：
+
+![tree_98](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/tree_98.jpg)
+
+```markdown
+Input: root = [5,1,4,null,null,3,6]
+Output: false
+```
+
+Explanation: The root node's value is 5 but its right child's value is 4.
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isValidBST = function(root) {
+    let c = function(node, v)  {
+        if (v.result) {
+            return;
+        }
+        if (!node) {
+            return;
+        } else {
+            c(node.left, v);
+            if (v.val >= node.val) {
+                v.result = true;
+                return;
+            }
+            v.val = node.val;
+            c(node.right, v);
+        }
+    }
+    let result = {val: -Infinity, result: false};
+    c(root, result);
+    return !result.result;
+};
+```
+
