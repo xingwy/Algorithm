@@ -371,3 +371,44 @@ var generateTrees = function(n) {
 };
 ```
 
+#### **[96.Unique Binary Search Trees](https://leetcode-cn.com/problems/unique-binary-search-trees/)**
+
+Problem：
+
+Given an integer n, return the number of structurally unique BST's (binary search trees) which has exactly n nodes of unique values from 1 to n.
+
+Example：
+
+![uniquebstn3_96](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/uniquebstn3_96.jpg)
+
+```markdown
+Input: n = 3
+Output: 5
+```
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numTrees = function(n) {
+    let _map = new Map();
+    let dfs = function(t) {
+        if (t <= 1) {
+            return 1;
+        } 
+        if (_map.has(t)) {
+            return _map.get(t);
+        }
+        let res = 0;
+        for (let i=1; i<=t; i++) {
+            res += dfs(i-1)*dfs(t-i);
+        }
+        _map.set(t, res);
+        return res;
+    }
+
+    return dfs(n);
+};
+```
+
