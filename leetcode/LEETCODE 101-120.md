@@ -193,6 +193,59 @@ var hasPathSum = function(root, targetSum) {
 };
 ```
 
+#### **[113.Path Sum II](https://leetcode-cn.com/problems/path-sum-ii/)**
+
+Problem：
+
+Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where each path's sum equals targetSum.
+
+A leaf is a node with no children.
+
+Example：
+
+![pathsumii_113](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/pathsumii_113.jpg)
+
+```markdown
+Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1],
+targetSum = 22
+Output: [[5,4,11,2],[5,8,4,5]]
+```
+
+```js\
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} targetSum
+ * @return {number[][]}
+ */
+var pathSum = function(root, targetSum) {
+    let res = [];
+    let dfs = function(node, target, path) {
+        if (!node) {
+            return;
+        }
+        target += node.val;
+        let t = [].concat(path)
+        t.push(node.val)
+
+        if (target == targetSum && node.left == null && node.right == null) {
+            res.push(t);
+        }
+        dfs(node.left, target, t);
+        dfs(node.right, target, t);
+    }
+    dfs(root, 0, []);
+    return res;
+};
+```
+
 
 
 #### **[114.Flatten Binary Tree to Linked List](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)**
