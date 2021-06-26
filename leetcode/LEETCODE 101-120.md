@@ -94,6 +94,51 @@ var isBalanced = function(root) {
 };
 ```
 
+#### **[111.Minimum Depth of Binary Tree](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)**
+
+Problem：
+
+Given a binary tree, find its minimum depth.
+
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+
+Note: A leaf is a node with no children.
+
+Example：
+
+![balance_110](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/balance_110.jpg)
+
+```markdown
+Input: root = [3,9,20,null,null,15,7]
+Output: 2
+```
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var minDepth = function(root) {
+    if (root == null) return 0;
+    if (root.left && root.right) {
+        return 1 + Math.min(minDepth(root.left), minDepth(root.right));
+    } else if (root.left) {
+        return 1 + minDepth(root.left);
+    } else if (root.right) {
+        return 1 + minDepth(root.right);
+    } else {
+        return 1;
+    }
+};
+```
+
 
 
 #### **[114.Flatten Binary Tree to Linked List](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)**
