@@ -373,3 +373,40 @@ var connect = function(root) {
 };
 ```
 
+#### **[119.Pascal's Triangle II](https://leetcode-cn.com/problems/pascals-triangle-ii/)**
+
+Problem：
+
+Given an integer rowIndex, return the rowIndexth (0-indexed) row of the Pascal's triangle.
+
+In Pascal's triangle, each number is the sum of the two numbers directly above it as shown.
+
+Example：
+
+```markdown
+Input: rowIndex = 3
+Output: [1,3,3,1]
+```
+
+```js
+/**
+ * @param {number} rowIndex
+ * @return {number[]}
+ */
+var getRow = function(rowIndex) {
+    let res = [];
+    for (let i=0; i<=rowIndex; i++) {
+        res.push(1);
+        let t = res[0];
+        for (let j=1; j<res.length-1; j++) {
+            let tmp = res[j];
+            res[j] = res[j] + t;
+            t = tmp;
+        }
+    }
+    return res;
+};
+```
+
+
+
