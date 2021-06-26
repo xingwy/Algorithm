@@ -44,6 +44,58 @@ var maxDepth = function(root) {
 };
 ```
 
+#### **[110.Balanced Binary Tree](https://leetcode-cn.com/problems/balanced-binary-tree/)**
+
+Problem：
+
+Given a binary tree, determine if it is height-balanced.
+
+For this problem, a height-balanced binary tree is defined as:
+
+a binary tree in which the left and right subtrees of every node differ in height by no more than 1.
+
+Example：
+
+![balance_110](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/balance_110.jpg)
+
+```markdown
+Input: root = [3,9,20,null,null,15,7]
+Output: true
+```
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isBalanced = function(root) {
+    let res = true;
+    let dfs = function(r, t) {
+        if (!r) {
+            return 0;
+        }
+        let left = dfs(r.left, t+1);
+        let right = dfs(r.right, t+1);
+        if (Math.abs(left-right) > 1) {
+            res = false
+        }
+        return Math.max(left, right)+1;
+    }
+    dfs(root, 0);
+    return res;
+};
+```
+
+
+
 #### **[114.Flatten Binary Tree to Linked List](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)**
 
 Problem：
