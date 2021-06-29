@@ -136,3 +136,68 @@ var detectCycle = function(head) {
 };
 ```
 
+#### **[143. Reorder List](https://leetcode-cn.com/problems/reorder-list/)**
+
+Problem：
+
+You are given the head of a singly linked-list. The list can be represented as:
+
+```markdown
+L0 → L1 → … → Ln - 1 → Ln
+```
+
+*Reorder the list to be on the following form:*
+
+```markdown
+L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+```
+
+You may not modify the values in the list's nodes. Only nodes themselves may be changed.
+
+Example：
+
+![reorder2-linked-list](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/reorder2-linked-list.jpg)
+
+```markdown
+Input: head = [1,2,3,4,5]
+Output: [1,5,2,4,3]
+```
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {void} Do not return anything, modify head in-place instead.
+ */
+var reorderList = function(head) {
+    let list = []
+    let point = head;
+    while(point) {
+        list.push(point);
+        point = point.next;
+    }
+    let res = new ListNode();
+    let prev = res;
+    let begin = 0; end = list.length-1;
+    while (end >= begin) {
+        prev.next = list[begin];
+        prev = prev.next;
+        begin++;
+        if (begin > end) {
+            break;
+        }
+        prev.next = list[end];
+        prev = prev.next;
+        end--;
+    }
+    prev.next = null;
+    return res.next;
+};
+```
+
