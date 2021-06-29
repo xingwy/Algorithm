@@ -143,8 +143,3 @@ var maxProfit = function(prices) {
 ```
 
 
-
-
-
-
-
