@@ -246,6 +246,89 @@ var pathSum = function(root, targetSum) {
 };
 ```
 
+#### **[115. Distinct Subsequences](https://leetcode-cn.com/problems/distinct-subsequences/)**
+
+Problem：
+
+Given two strings s and t, return the number of distinct subsequences of s which equals t.
+
+A string's subsequence is a new string formed from the original string by deleting some (can be none) of the characters without disturbing the remaining characters' relative positions. (i.e., "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+It is guaranteed the answer fits on a 32-bit signed integer.
+
+Example：
+
+```markdown
+Input: s = "rabbbit", t = "rabbit"
+Output: 3
+// result
+rabbbit
+^^^^ ^^
+rabbbit
+^^ ^^^^
+rabbbit
+^^^ ^^^
+```
+
+Explanation：As shown below, there are 3 ways you can generate "rabbit" from S.
+
+```markdown
+Input: s = "babgbag", t = "bag"
+Output: 5
+// result
+babgbag
+^^ ^
+babgbag
+^^    ^
+babgbag
+^    ^^
+babgbag
+  ^  ^^
+babgbag
+    ^^^
+```
+
+Explanation：As shown below, there are 5 ways you can generate "bag" from S.
+
+```js
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {number}
+ */
+var numDistinct = function(s, t) {
+    // dp[i][j];  表示t[i]在 s[j]中序列个数
+    let m = s.length;
+    let n = t.length;
+    let dp = [];
+
+    // 构建最左列
+    let v = 0;
+    dp[0] = [];
+    for (let i=0; i<m; i++) {
+        if (s[i] == t[0]) {
+            v++;
+        }
+        dp[0][i] = v;
+    }
+    // 构建顶行
+    for (let i=1; i<n; i++) {
+        dp[i] = [0];
+    }
+
+    for (let i=1; i<n; i++) {
+        for (let j=1; j<m; j++) {
+            if (s[j] == t[i]) {
+                dp[i][j] = dp[i][j-1] + dp[i-1][j-1];
+            } else {
+                dp[i][j] = dp[i][j-1];
+            }
+        }
+    }
+    return dp[n-1][m-1];
+};
+```
+
 
 
 #### **[114.Flatten Binary Tree to Linked List](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)**
@@ -304,6 +387,78 @@ var flatten = function(root) {
     }
 };
 ```
+
+#### /**
+
+ \* @param {string} s
+
+ \* @param {string} t
+
+ \* @return {number}
+
+ */
+
+var numDistinct = function(s, t) {
+
+  // dp[i][j]; 表示t[i]在 s[j]中序列个数
+
+  let m = s.length;
+
+  let n = t.length;
+
+  let dp = [];
+
+
+
+  // 构建最左列
+
+  let v = 0;
+
+  dp[0] = [];
+
+  for (let i=0; i<m; i++) {
+
+​    if (s[i] == t[0]) {
+
+​      v++;
+
+​    }
+
+​    dp[0][i] = v;
+
+  }
+
+  // 构建顶行
+
+  for (let i=1; i<n; i++) {
+
+​    dp[i] = [0];
+
+  }
+
+
+
+  for (let i=1; i<n; i++) {
+
+​    for (let j=1; j<m; j++) {
+
+​      if (s[j] == t[i]) {
+
+​        dp[i][j] = dp[i][j-1] + dp[i-1][j-1];
+
+​      } else {
+
+​        dp[i][j] = dp[i][j-1];
+
+​      }
+
+​    }
+
+  }
+
+  return dp[n-1][m-1];
+
+};
 
 #### **[116.Populating Next Right Pointers in Each Node](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/)**
 
