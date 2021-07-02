@@ -39,6 +39,44 @@ var twoSum = function(numbers, target) {
 };
 ```
 
+#### **[171. Excel Sheet Column Number](https://leetcode-cn.com/problems/excel-sheet-column-number/)**
+
+Problem：
+
+Given a string columnTitle that represents the column title as appear in an Excel sheet, return its corresponding column number.
+
+```markdown
+A -> 1
+B -> 2
+C -> 3
+...
+Z -> 26
+AA -> 27
+AB -> 28 
+...
+```
+
+Example：
+
+```markdown
+Input: columnTitle = "FXSHRXW"
+Output: 2147483647
+```
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var titleToNumber = function(s) {
+    let sum = 0;
+    for (let i=0; i<s.length; i++) {
+        sum = (sum*26 + s[i].charCodeAt()-'A'.charCodeAt()+1);  
+    }
+    return sum;
+};
+```
+
 
 
 #### **[174. Dungeon Game](https://leetcode-cn.com/problems/dungeon-game/)**
