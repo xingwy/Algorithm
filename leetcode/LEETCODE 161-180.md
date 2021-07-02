@@ -77,6 +77,39 @@ var titleToNumber = function(s) {
 };
 ```
 
+#### **[172. Factorial Trailing Zeroes](https://leetcode-cn.com/problems/factorial-trailing-zeroes/)**
+
+Problem：
+
+Given an integer n, return the number of trailing zeroes in n!.
+
+Follow up: Could you write a solution that works in logarithmic time complexity?
+
+Example：
+
+```markdown
+Input: n = 3
+Output: 0
+```
+
+Explanation: 3! = 6, no trailing zero.
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var trailingZeroes = function(n) {
+    let num = 0;
+    let base = 5;
+    while (n >= base) {
+        num += Math.floor(n/base);
+        base *= 5;
+    }
+    return num;
+};
+```
+
 
 
 #### **[174. Dungeon Game](https://leetcode-cn.com/problems/dungeon-game/)**
