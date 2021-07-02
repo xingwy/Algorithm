@@ -1,5 +1,46 @@
 ### **LEETCODE 161-180**
 
+#### **[167. Two Sum II - Input array is sorted](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)**
+
+Problem：
+
+Given an array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number.
+
+Return the indices of the two numbers (1-indexed) as an integer array answer of size 2, where 1 <= answer[0] < answer[1] <= numbers.length.
+
+The tests are generated such that there is exactly one solution. You may not use the same element twice.
+
+Example：
+
+```markdown
+Input: numbers = [2,7,11,15], target = 9
+Output: [1,2]
+```
+
+Explanation: The sum of 2 and 7 is 9. Therefore index1 = 1, index2 = 2.
+
+```js
+/**
+ * @param {number[]} numbers
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(numbers, target) {
+    let l = 0;
+    let r = numbers.length-1;
+    while(l<r) {
+        if (numbers[l] + numbers[r] == target) {
+            return [l+1,r+1];
+        } else {
+            numbers[l]+numbers[r] > target? r--: l++;
+        }
+    }
+    return [-1,-1]
+};
+```
+
+
+
 #### **[174. Dungeon Game](https://leetcode-cn.com/problems/dungeon-game/)**
 
 Problem：
