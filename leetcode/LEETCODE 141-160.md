@@ -399,3 +399,43 @@ var evalRPN = function(tokens) {
 };
 ```
 
+#### **[152. Maximum Product Subarray](https://leetcode-cn.com/problems/maximum-product-subarray/)**
+
+Problem：
+
+Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product.
+
+It is guaranteed that the answer will fit in a 32-bit integer.
+
+A subarray is a contiguous subsequence of the array.
+
+Example：
+
+```markdown
+Input: nums = [-2,0,-1]
+Output: 0
+```
+
+Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxProduct = function(nums) {
+    let max;
+    let max_old, min_old
+    max = max_old = min_old = nums[0];
+    for (let i=1; i<nums.length; i++) {
+        let tmp = Math.max(max_old*nums[i], min_old*nums[i], nums[i]);
+        min_old = Math.min(max_old*nums[i], min_old*nums[i], nums[i]);
+        max_old = tmp;
+        if (max < max_old) {
+            max = max_old;
+        }
+    }
+    return max;
+};
+```
+
