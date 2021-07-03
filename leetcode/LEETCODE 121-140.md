@@ -331,5 +331,34 @@ Explanation: You can allocate to the first, second and third child with 2, 1, 2 
 };
 ```
 
+#### **[136. Single Number](https://leetcode-cn.com/problems/single-number/)**
+
+Problem：
+
+Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+
+You must implement a solution with a linear runtime complexity and use only constant extra space.
+
+Example：
+
+```markdown
+Input: nums = [2,2,1]
+Output: 1
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var singleNumber = function(nums) {
+    let t = 0;
+    for (let i=0; i<nums.length; i++) {
+        t = t ^ nums[i];
+    }
+    return t;
+};
+```
+
 
 
