@@ -288,3 +288,51 @@ var postorderTraversal = function(root) {
 };
 ```
 
+#### **[148. Sort List](https://leetcode-cn.com/problems/sort-list/)**
+
+Problem：
+
+Given the head of a linked list, return the list after sorting it in ascending order.
+
+Follow up: Can you sort the linked list in O(n logn) time and O(1) memory (i.e. constant space)?
+
+Example：
+
+![sort_list_2](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/sort_list_2.jpg)
+
+```markdown
+Input: head = [-1,5,3,4,0]
+Output: [-1,0,3,4,5]
+```
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var sortList = function(head) {
+    let list = []
+    let point = head;
+    while(point) {
+        list.push(point);
+        point = point.next;
+    }
+    let res = new ListNode();
+    let prev = res;
+    list.sort((a, b) => a.val-b.val);
+    for (let i=0; i<list.length; i++) {
+        prev.next = list[i];
+        prev = prev.next;
+    }
+    prev.next = null;
+    return res.next;
+};
+```
+
