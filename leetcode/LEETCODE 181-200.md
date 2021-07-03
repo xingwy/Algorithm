@@ -79,3 +79,59 @@ var rob = function(nums) {
 };
 ```
 
+#### **[200. Number of Islands](https://leetcode-cn.com/problems/number-of-islands/)**
+
+Problem：
+Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example：
+
+```markdown
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+```
+
+```js
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function(grid) {
+    let width = grid.length || 0;
+    let high = grid[0] && grid[0].length || 0;
+
+    function serach(i, j) {
+        if (i < 0 || i >= width || j < 0 || j >= high){
+            return;
+        }
+        if (grid[i][j] <= 0) {
+            return;
+        }
+        grid[i][j] = -1;
+        serach(i, j - 1);
+        serach(i, j + 1);
+        serach(i - 1, j);
+        serach(i + 1, j);
+    }
+    let count = 0;
+    for (let i = 0; i < width; i++) {
+        for (let j = 0; j <high; j++) {
+            if (grid[i][j] <= 0) {
+                continue;
+            }
+            serach(i, j);
+            console.log(i, j);
+            count ++;
+        }
+    }
+    return count;
+};
+```
+
