@@ -244,3 +244,47 @@ var preorderTraversal = function(root) {
 };
 ```
 
+#### **[145. Binary Tree Postorder Traversal](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)**
+
+Problem：
+
+Given the root of a binary tree, return the postorder traversal of its nodes' values.
+
+Example：
+
+![pre1](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/pre1.jpg)
+
+```markdown
+Input: root = [1,null,2,3]
+Output: [3,2,1]
+```
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var postorderTraversal = function(root) {
+    let list = [];
+
+    let dfs = function(node) {
+        if (!node) {
+            return;
+        }
+        dfs(node.left);
+        dfs(node.right);
+        list.push(node.val);
+    }
+    dfs(root);
+    return list;
+};
+```
+
