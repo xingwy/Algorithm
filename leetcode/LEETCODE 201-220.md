@@ -197,5 +197,37 @@ var containsNearbyDuplicate = function(nums, k) {
 };
 ```
 
+#### **[220. Contains Duplicate III](https://leetcode-cn.com/problems/contains-duplicate-iii/)**
+
+Problem：
+
+Given an integer array nums and two integers k and t, return true if there are two distinct indices i and j in the array such that abs(nums[i] - nums[j]) <= t and abs(i - j) <= k.
+
+Example：
+
+```markdown
+Input: nums = [1,2,3,1], k = 3, t = 0
+Output: true
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @param {number} t
+ * @return {boolean}
+ */
+var containsNearbyAlmostDuplicate = function(nums, k, t) {
+    for (let i=1; i<nums.length; i++) {
+        for (let j=Math.max(0, i-k); j<i; j++){
+            if (Math.abs(nums[i] - nums[j]) <= t){
+                return true;
+            }
+        }
+    }
+    return false;
+};
+```
+
 
 
