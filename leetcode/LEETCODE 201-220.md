@@ -49,5 +49,85 @@ var rob = function(nums) {
 };
 ```
 
+#### **[215. Kth Largest Element in an Array](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)**
+
+Problem：
+Given an integer array `nums` and an integer `k`, return *the* `kth` *largest element in the array*.
+
+Note that it is the `kth` largest element in the sorted order, not the `kth` distinct element.
+
+Example：
+
+```markdown
+Input: nums = [3,2,1,5,6,4], k = 2
+Output: 5
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var findKthLargest = function(nums, k) {
+    nums.sort((a,b) => (b -a));
+    return nums[k-1];
+};
+```
+
+#### **[216. Combination Sum III](https://leetcode-cn.com/problems/combination-sum-iii/)**
+
+Problem：
+
+Find all valid combinations of k numbers that sum up to n such that the following conditions are true:
+
+- Only numbers 1 through 9 are used.
+
+- Each number is used at most once.
+
+Return a list of all possible valid combinations. The list must not contain the same combination twice, and the combinations may be returned in any order.
+
+Example：
+
+```js
+Input: k = 3, n = 9
+Output: [[1,2,6],[1,3,5],[2,3,4]]
+```
+
+Explanation:
+1 + 2 + 6 = 9
+1 + 3 + 5 = 9
+2 + 3 + 4 = 9
+There are no other valid combinations.
+
+```js
+/**
+ * @param {number} k
+ * @param {number} n
+ * @return {number[][]}
+ */
+var combinationSum3 = function(k, n) {
+    let res = [];
+    let dfs = function (i, len, sum, total) {
+        if (len > k || sum > n) {
+            return;
+        }
+        if (len == k) {
+            if (sum == n) {
+                res.push([].concat(total));
+            }
+        } else {
+            for (let j=i+1; j<=9; j++) {
+                total.push(j);
+                dfs(j, len + 1, sum + j, total);
+                total.pop();
+            }
+        }
+    }
+    dfs(0,0,0,[]);
+    return res;
+};
+```
+
 
 
