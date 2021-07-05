@@ -42,7 +42,6 @@ var computeArea = function(A, B, C, D, E, F, G, H) {
     } else {
         return area - (maxy - miny)*(maxx - minx);
     }
-    
 };
 ```
 
