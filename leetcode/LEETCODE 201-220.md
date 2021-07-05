@@ -129,5 +129,38 @@ var combinationSum3 = function(k, n) {
 };
 ```
 
+#### **[217. Contains Duplicate](https://leetcode-cn.com/problems/contains-duplicate/)**
+
+Problem：
+
+Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
+
+Example：
+
+```markdown
+Input: nums = [1,2,3,1]
+Output: true
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var containsDuplicate = function(nums) {
+    let _map = new Set();
+    for (let n of nums) {
+        if (_map.has(n)) {
+            return true;
+        } else {
+            _map.add(n);
+        }
+    }
+    return _map.size != nums.length;
+};
+```
+
+
+
 
 
