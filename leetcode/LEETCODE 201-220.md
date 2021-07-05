@@ -164,5 +164,38 @@ var containsDuplicate = function(nums) {
 
 [problem](https://github.com/xingwy/Algorithm/blob/master/common/%E5%A4%A9%E9%99%85%E7%BA%BF%E9%97%AE%E9%A2%98.md)
 
+#### **[219. Contains Duplicate II](https://leetcode-cn.com/problems/contains-duplicate-ii/)**
+
+Problem：
+
+Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k.
+
+Example：
+
+```js
+Input: nums = [1,2,3,1], k = 3
+Output: true
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+var containsNearbyDuplicate = function(nums, k) {
+    let _map = new Map();
+    for (let i=0; i<nums.length; i++) {
+        if (_map.has(nums[i])) {
+            if (i -_map.get(nums[i]) <= k) {
+                return true;
+            }
+        }
+        _map.set(nums[i], i);
+    }
+    return false;
+};
+```
+
 
 
