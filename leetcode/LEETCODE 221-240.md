@@ -45,5 +45,49 @@ var computeArea = function(A, B, C, D, E, F, G, H) {
 };
 ```
 
+#### **[233. Number of Digit One](https://leetcode-cn.com/problems/number-of-digit-one/)**
 
+Problem：
+
+Given an integer n, count the total number of digit 1 appearing in all non-negative integers less than or equal to n.
+
+Example：
+
+```markdown
+Input: n = 13
+Output: 6
+```
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var countDigitOne = function(n) {
+    //前置位
+    let prev = n;
+    let tail = 0;
+    //当前位
+    let cur = 0;
+    let count = 0;
+    let num = 1;
+    while (prev != 0) {
+        cur = prev % 10;
+        prev = Math.floor(prev/10);
+        if (cur == 0) {
+            // 借位
+            count += prev * num;
+        } else if (cur == 1) {
+            count += (prev * num + (tail + 1));
+        } else {
+            count += (prev * num + num);
+        }
+
+        //尾巴
+        tail = cur * num + tail;                  
+        num *= 10;
+    }
+    return count;
+};
+```
 
