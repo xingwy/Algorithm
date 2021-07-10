@@ -114,3 +114,57 @@ var validUtf8 = function(data) {
 };
 ```
 
+#### **[394. Decode String](https://leetcode-cn.com/problems/decode-string/)**
+
+Problem：
+
+Given an encoded string, return its decoded string.
+
+The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+
+You may assume that the input string is always valid; No extra white spaces, square brackets are well-formed, etc.
+
+Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there won't be input like 3a or 2[4].
+
+Example：
+
+```markdown
+Input: s = "3[a]2[bc]"
+Output: "aaabcbc"
+```
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var decodeString = function(s) {
+    let index = 0;
+    let parse = function() {
+        let num = "";
+        let str = "";
+        while(index < s.length) {
+            if (s[index] == "]") {
+                index++;
+                return str;
+            } else if(s[index] <= '9' && s[index] >= "0") {
+                num += s[index++];
+            } else if (s[index] == "[") {
+                index++;
+                num = Number(num);
+                let v = parse();
+                for (let j=0; j<num; j++) {
+                    str += v;
+                }
+                num = "";
+            } else {
+                str += s[index++];
+            }
+        }
+        return str;
+    }
+
+    return parse();
+};
+```
+
