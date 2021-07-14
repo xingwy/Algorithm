@@ -1,5 +1,72 @@
 ### **LEETCODE 161-180**
 
+#### **[164. Maximum Gap](https://leetcode-cn.com/problems/maximum-gap/)**
+
+Problem：
+
+Given an integer array nums, return the maximum difference between two successive elements in its sorted form. If the array contains less than two elements, return 0.
+
+You must write an algorithm that runs in linear time and uses linear extra space.
+
+Example：
+
+```markdown
+Input: nums = [3,6,9,1]
+Output: 3
+```
+
+Explanation: The sorted form of the array is [1,3,6,9], either (3,6) or (6,9) has the maximum difference 3.
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+ var maximumGap = function(nums) {
+    if (nums.length < 2) {
+        return 0;
+    }
+    let buts1 = [];
+    let buts2 = [];
+
+    for (let i=0; i<=9; i++) {
+        buts1[i] = [];
+        buts2[i] = []
+    }
+    for (let base = 1; base <= Math.pow(2, 31); base *= 10) {
+        if (base == 1) {
+            // 初始化桶1
+            for (let i=0; i<nums.length; i++) {
+                let id = Math.floor((nums[i]%(base*10))/base);
+                buts2[id].push(nums[i]);
+            }
+        } else {
+            // 桶1移植到桶2
+            for (let i=0; i<=9; i++) {
+                for (let j=0; j<buts1[i].length; j++) {
+                    let id = Math.floor((buts1[i][j]%(base*10))/base);
+                    buts2[id].push(buts1[i][j]);
+                }
+            }
+        }
+
+        // 初始化桶2  赋值桶1数据
+        buts1 = buts2;
+        buts2 = [];
+        for (let i=0; i<=9; i++) {
+            buts2[i] = []
+        }
+    }
+    let max = -Infinity;
+    for (let i=0; i<buts1[0].length-1; i++) {
+        max = Math.max(max, buts1[0][i+1] - buts1[0][i]);
+    }
+    return max;
+};
+```
+
+
+
 #### **[167. Two Sum II - Input array is sorted](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)**
 
 Problem：
