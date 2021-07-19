@@ -98,3 +98,43 @@ var findMaxConsecutiveOnes = function(nums) {
 };
 ```
 
+#### **[491. Increasing Subsequences](https://leetcode-cn.com/problems/increasing-subsequences/)**
+
+Problem：
+
+Given an integer array nums, return all the different possible increasing subsequences of the given array with at least two elements. You may return the answer in any order.
+
+The given array may contain duplicates, and two equal integers should also be considered a special case of increasing sequence.
+
+Example：
+
+```markdown
+Input: nums = [4,6,7,7]
+Output: [[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var findSubsequences = function(nums) {
+    let total = [];
+    let dfs = function(start, res) {
+        if(res.length >= 2) total.push([].concat(res));
+        let _map = new Set();
+        for (let i=start; i<nums.length; i++) {
+            if (_map.has(nums[i]) || nums[i] < res[res.length-1]) continue;
+            // 选取此值
+            _map.add(nums[i]);
+            res.push(nums[i]);
+            dfs(i+1, res);
+            // 回溯
+            res.pop();
+        }
+    }
+    dfs(0, []);
+    return total;
+};
+```
+
