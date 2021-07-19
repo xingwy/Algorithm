@@ -1,5 +1,106 @@
 ### **LEETCODE 381-400**
 
+#### **[381. Insert Delete GetRandom O(1) - Duplicates allowed](https://leetcode-cn.com/problems/insert-delete-getrandom-o1-duplicates-allowed/)**
+
+Problem：
+
+Implement the RandomizedCollection class:
+
+- RandomizedCollection() Initializes the RandomizedCollection object.
+- bool insert(int val) Inserts an item val into the multiset if not present. Returns true if the item was not present, false otherwise.
+- bool remove(int val) Removes an item val from the multiset if present. Returns true if the item was present, false otherwise. Note that if val has multiple occurrences in the multiset, we only remove one of them.
+- int getRandom() Returns a random element from the current multiset of elements (it's guaranteed that at least one element exists when this method is called). The probability of each element being returned is linearly related to the number of same values the multiset contains.
+
+You must implement the functions of the class such that each function works in average O(1) time complexity.
+
+Example：
+
+```markdown
+["RandomizedCollection", "insert", "insert", "insert", "getRandom", "remove", "getRandom"]
+[[], [1], [1], [2], [], [1], []]
+Output
+[null, true, false, true, 2, true, 1]
+```
+
+Explanation
+
+- RandomizedCollection randomizedCollection = new RandomizedCollection();
+- randomizedCollection.insert(1);   // return True. Inserts 1 to the collection. Returns true as the collection did not contain 1.
+- randomizedCollection.insert(1);   // return False. Inserts another 1 to the collection. Returns false as the collection contained 1. Collection now contains [1,1].
+- randomizedCollection.insert(2);   // return True. Inserts 2 to the collection, returns true. Collection now contains [1,1,2].
+- randomizedCollection.getRandom(); // getRandom should return 1 with the probability 2/3, and returns 2 with the probability 1/3.
+- randomizedCollection.remove(1);   // return True. Removes 1 from the collection, returns true. Collection now contains [1,2].
+- randomizedCollection.getRandom(); // getRandom should return 1 and 2 both equally likely.
+
+```js
+/**
+ * Initialize your data structure here.
+ */
+var RandomizedCollection = function() {
+    this._list = [];
+    this.len = 0;
+    this._map = new Map();
+};
+
+/**
+ * Inserts a value to the collection. Returns true if the collection did not already contain the specified element. 
+ * @param {number} val
+ * @return {boolean}
+ */
+RandomizedCollection.prototype.insert = function(val) {
+    if (!this._map.has(val)) {
+        this._map.set(val, new Set());
+    }
+    let v = this._map.get(val);
+    this._list[this.len] = val;
+    this.len += 1;
+    v.add(this.len-1);
+    if (v.size <= 1){
+        return true;
+    } else {
+        return false;
+    }
+};
+
+/**
+ * Removes a value from the collection. Returns true if the collection contained the specified element. 
+ * @param {number} val
+ * @return {boolean}
+ */
+RandomizedCollection.prototype.remove = function(val) {
+    let indexs = this._map.get(val);
+    if (!indexs || indexs.size == 0) {
+        return false;
+    }
+    // 随机弹出一个
+    let it = indexs.entries();
+    let index = it.next().value[0];
+    indexs.delete(index);
+    let v = this._list[this.len-1];
+    // if (v != val) {
+        let v_indexs = this._map.get(v);
+        
+        v_indexs.add(index);
+        v_indexs.delete(this.len-1);
+        this._list[index] = this._list[this.len-1];
+    // }
+    
+    this.len--;
+    return true;
+};
+
+/**
+ * Get a random element from the collection.
+ * @return {number}
+ */
+RandomizedCollection.prototype.getRandom = function() {
+    let index = Math.floor(Math.random() * this.len);
+    return this._list[index];
+};
+```
+
+
+
 #### **[392. Is Subsequence](https://leetcode-cn.com/problems/is-subsequence/)**
 
 Problem：
