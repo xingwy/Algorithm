@@ -175,3 +175,60 @@ var constructRectangle = function(area) {
 };
 ```
 
+#### **[494. Target Sum](https://leetcode-cn.com/problems/target-sum/)**
+
+Problem：
+
+You are given an integer array nums and an integer target.
+
+You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
+
+- For example, if nums = [2, 1], you can add a '+' before 2 and a '-' before 1 and concatenate them to build the expression "+2-1".
+
+
+Return the number of different expressions that you can build, which evaluates to target.
+
+Example：
+
+```markdown
+Input: nums = [1,1,1,1,1], target = 3
+Output: 5
+```
+
+Explanation: There are 5 ways to assign symbols to make the sum of nums be target 3.
+-1 + 1 + 1 + 1 + 1 = 3
++1 - 1 + 1 + 1 + 1 = 3
++1 + 1 - 1 + 1 + 1 = 3
++1 + 1 + 1 - 1 + 1 = 3
++1 + 1 + 1 + 1 - 1 = 3
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} S
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, S) {
+    let mapList = [new Map(), new Map];
+    let i = 0
+    for (; i<nums.length; i++) {
+        if (i == 0) {
+            let _v1 = mapList[i%2].get(0 + nums[i]) || 0;
+            mapList[i%2].set(0 + nums[i], 1 + _v1);
+            let _v2 = mapList[i%2].get(0 - nums[i]) || 0;
+            mapList[i%2].set(0 - nums[i], 1 + _v2);
+        } else {
+            mapList[(i+1)%2].forEach((v, k) => {
+                let _v1 = mapList[i%2].get(k + nums[i]) || 0;
+                mapList[i%2].set(k + nums[i], v + _v1);
+
+                let _v2 = mapList[i%2].get(k - nums[i]) || 0;
+                mapList[i%2].set(k - nums[i], v + _v2);
+            })
+            mapList[(i+1)%2].clear();
+        }
+    }
+    return mapList[(i+1)%2].get(S) || 0;
+};
+```
+
