@@ -1,5 +1,64 @@
 ### **LEETCODE 481-500**
 
+#### **[482. License Key Formatting](https://leetcode-cn.com/problems/license-key-formatting/)**
+
+Problem：
+
+You are given a license key represented as a string s that consists of only alphanumeric characters and dashes. The string is separated into n + 1 groups by n dashes. You are also given an integer k.
+
+We want to reformat the string s such that each group contains exactly k characters, except for the first group, which could be shorter than k but still must contain at least one character. Furthermore, there must be a dash inserted between two groups, and you should convert all lowercase letters to uppercase.
+
+Return the reformatted license key.
+
+Example：
+
+```markdown
+Input: s = "5F3Z-2e-9-w", k = 4
+Output: "5F3Z-2E9W"
+```
+
+Explanation: The string s has been split into two parts, each part has 4 characters.
+Note that the two extra dashes are not needed and can be removed.
+
+```js
+/**
+ * @param {string} S
+ * @param {number} K
+ * @return {string}
+ */
+var licenseKeyFormatting = function(S, K) {
+    let _map = {};
+    let offset = 'A'.charCodeAt() - 'a'.charCodeAt();
+    for (let i='a'.charCodeAt(); i<='z'.charCodeAt(); i++) {
+        _map[ String.fromCharCode(i)] = String.fromCharCode(i+offset)
+    }
+    let list = S.split("-").filter((v) => !!v).map((v) => {
+        let t = "";
+        for (let i=0; i<v.length; i++) {
+            if (v[i].charCodeAt() <="z".charCodeAt() && v[i].charCodeAt()>="a".charCodeAt()) {
+                t += _map[v[i]];
+            } else {
+                t += v[i];
+            }
+        }
+        return t;
+    });
+    let left = "";
+    let result = [];
+    for (let i=list.length-1; i>=0; i--) {
+        left = list[i] + left;
+        while (left.length >= K) {
+            result.push(left.substring(left.length - K));
+            left = left.substring(0, left.length - K);
+        }
+    }
+    if (left) {
+        result.push(left);
+    }
+    return result.reverse().join("-");
+};
+```
+
 #### **[483. Smallest Good Base](https://leetcode-cn.com/problems/smallest-good-base/)**
 
 Problem：
