@@ -380,3 +380,58 @@ var nextGreaterElement = function(nums1, nums2) {
 };
 ```
 
+#### **[498. Diagonal Traverse](https://leetcode-cn.com/problems/diagonal-traverse/)**
+
+Problem：
+
+Given an m x n matrix mat, return an array of all the elements of the array in a diagonal order.
+
+Example：
+
+![diag1-grid](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/diag1-grid.jpg)
+
+```markdown
+Input: mat = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,4,7,5,3,6,8,9]
+```
+
+```js
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var findDiagonalOrder = function(matrix) {
+    let m = matrix.length;
+    if (!m) {
+        return [];
+    } 
+    let n = matrix[0].length;
+    if (!n) {
+        return []
+    }
+    let index = 0;
+    let needreverse  = false;
+    let res = [];
+    while (index <(m + n - 1)) {
+        let i = Math.min(index, m - 1);
+        let j = index - i;
+        let tmp = [];
+        while (true) {
+            if (i < 0 || j >= n) {
+                break;
+            }
+            tmp.push(matrix[i][j]);
+            i--;
+            j++;
+        }
+        if (needreverse) {
+            tmp.reverse();
+        }
+        res.push(...tmp);
+        needreverse = !needreverse;
+        index++;
+    }
+    return res;
+};
+```
+
