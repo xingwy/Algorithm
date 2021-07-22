@@ -56,3 +56,33 @@ var uniqueLetterString = function(s) {
 };
 ```
 
+#### **[829. Consecutive Numbers Sum](https://leetcode-cn.com/problems/consecutive-numbers-sum/)**
+
+Problem：
+
+Given an integer n, return the number of ways you can write n as the sum of consecutive positive integers.
+
+Example：
+
+```markdown
+Input: n = 5
+Output: 2
+```
+
+Explanation: 5 = 2 + 3
+
+```js
+/**
+ * @param {number} N
+ * @return {number}
+ */
+var consecutiveNumbersSum = function(N) {
+    let cnt = 1;
+    N = N*2;
+    for (let i=2; i<Math.sqrt(N); i++) {
+        !((N-i-i*i)%(2*i)) && cnt++;
+    }
+    return cnt;
+};
+```
+
