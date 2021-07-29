@@ -336,6 +336,81 @@ var sortList = function(head) {
 };
 ```
 
+#### [149. Max Points on a Line](https://leetcode-cn.com/problems/max-points-on-a-line/)
+
+Problem：
+
+Given an array of points where points[i] = [xi, yi] represents a point on the X-Y plane, return the maximum number of points that lie on the same straight line.
+
+Example：
+
+![plane1](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/plane1.jpg)
+
+```markdown
+Input: points = [[1,1],[2,2],[3,3]]
+Output: 3
+```
+
+```js
+/**
+ * @param {number[][]} points
+ * @return {number}
+ */
+var maxPoints = function(points) {
+    // ax + by + c = 0;  确定a b为自然数 a,b保持最大公约数为1 
+    let _map = new Map();
+    
+    let gcd = function (a, b) {
+        while (b != 0) {
+            let c = a % b;
+            a = b;
+            b = c;
+        }
+        return a;
+    }
+    let max = 1;
+    let cal = function (pointA, pointB) {
+        let x1 = pointA[0];
+        let y1 = pointA[1];
+        let x2 = pointB[0];
+        let y2 = pointB[1];
+
+        let diffy = y2 - y1;
+        let diffx = x2 - x1;
+        let key = "";
+        if (diffx == 0) {
+            key = `x_${x1}`;
+            
+        } else if (diffy == 0) {
+            key = `y_${y1}`;
+        } else {
+            let g = gcd(diffx, diffy);
+            diffx /= g;
+            diffy /= g;
+            let c = diffx*y1 - diffy*x1;
+            key = `${diffy}_${diffx}_${c}`;
+            
+        }
+        if (!_map.has(key)) {
+            _map.set(key, new Set());
+        }
+        _map.get(key).add(x1+"_"+y1);
+        _map.get(key).add(x2+"_"+y2);
+        max = Math.max(max, _map.get(key).size);
+    }
+
+    for (let i=0; i<points.length; i++) {
+        for (let j=0; j<points.length; j++) {
+            if (i == j) {
+                continue;
+            }
+            cal(points[i], points[j]);
+        }
+    }
+    return max;
+};
+```
+
 #### **[150. Evaluate Reverse Polish Notation](https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/)**
 
 Problem：
