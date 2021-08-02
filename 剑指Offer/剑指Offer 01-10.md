@@ -49,7 +49,7 @@ var reversePrint = function(head) {
 
 示例：
 
-![tree](C:\Users\Administrator\Desktop\Algorithm\images\tree.jpg)
+![tree](https://github.com/xingwy/Algorithm/tree/master/images/tree.jpg)
 
 ```markdown
 Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]

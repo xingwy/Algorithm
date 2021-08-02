@@ -32,3 +32,89 @@ var minArray = function(numbers) {
     return numbers[r];
 };
 ```
+
+#### [剑指 Offer 12. 矩阵中的路径](https://leetcode-cn.com/problems/ju-zhen-zhong-de-lu-jing-lcof/)
+
+题：给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+例如，在下面的 3×4 的矩阵中包含单词 "ABCCED"（单词中的字母已标出）。
+
+![word2](https://github.com/xingwy/Algorithm/tree/master/images/word2.jpg)
+
+示例：
+
+```markdown
+输入：board = [
+	["A","B","C","E"],
+	["S","F","C","S"],
+	["A","D","E","E"]
+], word = "ABCCED"
+输出：true
+```
+
+```js
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
+    
+    for (let i=0; i<board.length; i++) {
+        for (let j=0; j<board[i].length; j++) {
+            let path = new Set();
+            let res = dfs(board, i, j, word, 0, path);
+            if (res) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+let dfs = function(board, p_i, p_j, word, curIndex, path) {
+    if (curIndex >= word.length) {
+        return true;
+    }
+    if (path.has(p_i+"-"+p_j)) {
+        return false;
+    }
+    if (p_i < 0 || p_i >= board.length || p_j < 0 || p_j >= board[0].length) {
+        return false;
+    }
+    let key = word[curIndex];
+    if (board[p_i][p_j] != key) {
+        return false;
+    }
+
+    path.add(p_i+"-"+p_j);
+    let r1 = dfs(board, p_i+1, p_j, word, curIndex+1, path);
+    if (r1) {
+        path.delete(p_i+"-"+p_j);
+        return r1;
+    }
+    
+    let r2 = dfs(board, p_i-1, p_j, word, curIndex+1, path);
+    if (r2) {
+        path.delete(p_i+"-"+p_j);
+        return r2;
+    }
+    let r3 = dfs(board, p_i, p_j+1, word, curIndex+1, path);
+
+    if (r3) {
+        path.delete(p_i+"-"+p_j);
+        return r3;
+    }
+    let r4 = dfs(board, p_i, p_j-1, word, curIndex+1, path);
+
+    if (r4) {
+        path.delete(p_i+"-"+p_j);
+        return r4;
+    }
+    path.delete(p_i+"-"+p_j);
+    return false;
+}
+```
+
