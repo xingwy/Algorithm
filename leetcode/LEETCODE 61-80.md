@@ -494,6 +494,64 @@ var setZeroes = function(matrix) {
 };
 ```
 
+#### [74. Search a 2D Matrix](https://leetcode-cn.com/problems/search-a-2d-matrix/)
+
+Problem：
+
+Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+
+- Integers in each row are sorted from left to right.
+- The first integer of each row is greater than the last integer of the previous row.
+
+Example：
+
+![mat](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/mat.jpg)
+
+```markdown
+Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+Output: true
+```
+
+```js
+/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var searchMatrix = function(matrix, target) {
+    let m = matrix.length;
+    if (!m) {
+        return false;
+    }
+    let n = matrix[0].length;
+
+    let len = m * n;
+
+    let left = 0;
+    let right = len - 1;
+
+    let getValue = function (index) {
+        let i = Math.floor(index/n);
+        let j = index - i*n;
+        return matrix[i][j];
+    }
+
+    while (left < right) {
+        let mid = Math.floor((left+right)/2);
+        let mid_v = getValue(mid);
+        
+        if (mid_v == target) {
+            return true;
+        } else if (target < mid_v) {
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return getValue(left) == target;
+};
+```
+
 
 
 #### **[79.Word Search](https://leetcode-cn.com/problems/word-search/)**
