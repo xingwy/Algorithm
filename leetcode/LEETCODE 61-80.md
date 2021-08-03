@@ -439,6 +439,61 @@ var simplifyPath = function(path) {
 };
 ```
 
+#### [73. Set Matrix Zeroes](https://leetcode-cn.com/problems/set-matrix-zeroes/)
+
+Problem：
+
+Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's, and return the matrix.
+
+You must do it in place.
+
+Example：
+
+![mat2](https://github.com/xingwy/Hugging-Algorithm/blob/master/images/mat2.jpg)
+
+```markdown
+Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+```
+
+```js
+/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var setZeroes = function(matrix) {
+    if (!matrix.length) {
+        return;
+    }
+    let n = matrix.length;
+    let m = matrix[0].length;
+
+    let flag = false;
+    // 标记头列/头行
+    for (let i=0; i<n; i++) {
+        if (!matrix[i][0]) {
+            flag = true;
+        }
+
+        for (let j=1; j<m; j++) {
+            if (!matrix[i][j]) {
+                matrix[i][0] = matrix[0][j] = 0;
+            }
+        }
+    }
+    for (let i=n-1; i>=0; i--) {
+        for (let j=1; j<m; j++) {
+            if (!matrix[i][0] || !matrix[0][j]) {
+                matrix[i][j] = 0;
+            }
+        }
+        if (flag) {
+            matrix[i][0] = 0;
+        }
+    }
+};
+```
+
 
 
 #### **[79.Word Search](https://leetcode-cn.com/problems/word-search/)**
