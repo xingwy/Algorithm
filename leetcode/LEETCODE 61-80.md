@@ -646,6 +646,51 @@ var combine = function(n, k) {
 };
 ```
 
+#### [78. Subsets](https://leetcode-cn.com/problems/subsets/)
+
+Problem：
+
+Given an integer array nums of unique elements, return all possible subsets (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+Example：
+
+```markdown
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsets = function(nums) {
+    let result = [];
+    let n = nums.length;
+    let h = function (k, l) {
+        let index = l.length;
+        let lastMin = l[index-1] || 0;
+        if (index == k) {
+            result.push([...l.map(v => nums[v-1])]);
+            return;
+        }
+        for (let i=lastMin+1; i<=n-k+index+1; i++) {
+            l[index] = i;
+            if (index == 0) {
+            }
+            h(k, l);
+            l.pop();
+        }
+    }
+    for (let k=0; k<=nums.length; k++) {
+        h(k, []);
+    }
+    return result;
+};
+```
+
 
 
 #### **[79.Word Search](https://leetcode-cn.com/problems/word-search/)**
