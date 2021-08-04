@@ -595,6 +595,57 @@ var sortColors = function(nums) {
 };
 ```
 
+#### [77. Combinations](https://leetcode-cn.com/problems/combinations/)
+
+Problem：
+
+Given two integers n and k, return all possible combinations of k numbers out of the range [1, n].
+
+You may return the answer in any order.
+
+Example：
+
+```markdown
+Input: n = 4, k = 2
+Output:
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+```
+
+```js
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function(n, k) {
+
+    let result = [];
+    let h = function (l) {
+        let index = l.length;
+        let lastMin = l[index-1] || 0;
+        if (index == k) {
+            result.push([...l]);
+            return;
+        }
+        for (let i=lastMin+1; i<=n-k+index+1; i++) {
+            l[index] = i;
+            if (index == 0) {
+            }
+            h(l);
+            l.pop();
+        }
+    }
+    h([]);
+};
+```
+
 
 
 #### **[79.Word Search](https://leetcode-cn.com/problems/word-search/)**
