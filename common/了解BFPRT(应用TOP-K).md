@@ -65,3 +65,100 @@ f ≤ f * (3P+3)/4P + c，归边处理得(P-3)/4P * f ≤  c;
 
 这跟T(N)表达式有关，这主要取决于 (3P+3)/4P和c的平衡。选取3，增加 (3P+3)/4P，但是对于组内插入排序的效率更高，选取7,9,11，降低了(3P+3)/4P但却增加了c的常数。综合最少值选取了5。（偶数直接忽略，选取中位数不方便）
 
+JS版代码示例：
+
+```js
+//插入排序
+function insertSort(arr, l, r) {
+    for(let i = l + 1; i <= r; i++)
+    {
+        if(arr[i - 1] > arr[i])
+        {
+            let t = arr[i];
+            let j = i;
+            while(j > l && arr[j - 1] > t)
+            {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = t;
+        }
+    }
+}
+ 
+//寻找中位数的中位数
+function findMid(arr, l, r) {
+    if(l == r) return l;
+    let i = 0;
+    let n = 0;
+    for(i = l; i < r - 5; i += 5)
+    {
+        insertSort(arr, i, i + 4);
+        n = i - l;
+        let t = arr[i + 2];
+        arr[i + 2] = arr[Math.floor(l + n / 5)];
+        arr[Math.floor(l + n / 5)] = t;
+    }
+ 
+    //处理剩余元素
+    let num = r - i + 1;
+    if(num > 0)
+    {
+        insertSort(arr, i, i + num - 1);
+        n = i - l;
+        let t = arr[Math.floor(l + n / 5)];
+        arr[Math.floor(l + n / 5)] = arr[Math.floor(i + num / 2)];
+        arr[Math.floor(i + num / 2)] = t;
+    }
+    n = Math.floor(n / 5);
+    if(n == l) return l;
+    return findMid(arr, l, l + n);
+}
+ 
+//进行划分过程
+function partion(arr, l, r, p)
+{
+    let t = arr[l];
+    arr[l] = arr[p];
+    arr[p] = t;
+    let i = l;
+    let j = r;
+    let pivot = arr[l];
+    while(i < j)
+    {
+        while(arr[j] >= pivot && i < j) {
+            j--;
+        }
+        arr[i] = arr[j];
+        while(arr[i] <= pivot && i < j) {
+            i++;
+        }
+        arr[j] = arr[i];
+    }
+    arr[i] = pivot;
+    return i;
+}
+
+/**
+ * 
+ * @param {*} arr 
+ * @param {*} l 
+ * @param {*} r 
+ * @param {*} k 
+ * @returns 
+ */
+function BFPRT(arr, l, r, k) {
+    let p = findMid(arr, l, r);    //寻找中位数的中位数
+    let i = partion(arr, l, r, p);
+    let m = i - l + 1;
+    if(m == k) {
+        return arr[i];
+    } else if(m > k) {
+        return BFPRT(arr, l, i - 1, k);
+    }
+    return BFPRT(arr, i + 1, r, k - m);
+}
+// let data = [1,55,3,1,4,85,1,2,4,6];
+// BFPRT(data, 0, data.length-1, Math.floor(data.length/2));
+```
+
